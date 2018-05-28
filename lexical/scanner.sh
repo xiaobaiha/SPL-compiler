@@ -1,0 +1,1 @@
+for src in $(ls text_example/*.spl); do ./scanner < $src > $src.lex; done
