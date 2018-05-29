@@ -33,7 +33,7 @@ PARSE_TREE create_node(int ival, int case_identifier, PARSE_TREE p1,
     return (t);
 }
 
-void PrintTree(PARSE_TREE t, int indent)
+void print_tree(PARSE_TREE t, int indent)
 {
     int i;
     if (t == NULL)
