@@ -44,9 +44,9 @@ void print_tree(PARSE_TREE t, int indent)
     }
     printf("nodeIdentifier: %d", t->nodeIdentifier);
     printf("item: %d\n", t->item);
-    PrintTree(t->first, indent + 2);
-    PrintTree(t->second, indent + 2);
-    PrintTree(t->third, indent + 2);
+    print_tree(t->first, indent + 2);
+    print_tree(t->second, indent + 2);
+    print_tree(t->third, indent + 2);
 }
 
 #endif
