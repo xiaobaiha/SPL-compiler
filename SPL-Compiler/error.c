@@ -3,18 +3,6 @@
 #include <stdlib.h>
 #include "error.h"
 #include "util.h"
-//支持可变参数
-
-void fatal_error(const char *fmt, ... )
-{
-	va_list vl;
-  
-	va_start(vl,fmt);
-	vfprintf(stderr,fmt,vl);
-	va_end(vl);
-	fprintf(stderr,"at line number:\n");
-	exit(1);
-}
 
 bool anyErrors= FALSE;
 
@@ -75,4 +63,16 @@ void EM_reset(string fname)
 		EM_error(0,"cannot open"); 
 		exit(1);
 	}
+}
+
+//支持可变参数
+void fatal_error(const char *fmt, ... )
+{
+	va_list vl;
+  
+	va_start(vl,fmt);
+	vfprintf(stderr,fmt,vl);
+	va_end(vl);
+	fprintf(stderr,"at line number:\n");
+	exit(1);
 }

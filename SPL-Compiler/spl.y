@@ -8,6 +8,7 @@ int yylex(void);
 void yyerror(char *s);
 %}
 
+%locations
 
 %token NAME
 

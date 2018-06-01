@@ -1,5 +1,6 @@
 {
   "files.associations": {
-    "absyn.h": "c"
+    "absyn.h": "c",
+    "error.h": "c"
   }
 }
