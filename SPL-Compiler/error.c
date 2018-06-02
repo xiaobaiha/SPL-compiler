@@ -4,7 +4,7 @@
 #include "error.h"
 #include "util.h"
 
-bool anyErrors= FALSE;
+Bool anyErrors = (char *)FALSE;
 
 static string fileName = "";
 
@@ -37,7 +37,7 @@ void EM_error(int pos, char *message,...)
  	IntList lines = linePos; 
  	int num=lineNum;
  
-	anyErrors=TRUE;
+	anyErrors=(char*)TRUE;
 	while (lines && lines->i >= pos) 
 		{lines=lines->rest; num--;}
 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tree.h"
+#include "symbol.h"
 
 extern FILE *yyin;
 int yylex(void);
