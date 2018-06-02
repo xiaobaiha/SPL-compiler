@@ -8,6 +8,7 @@
 #include "absyn.h"
 #include "symbol.h"
 #include "util.h"
+#include "types.h"
 
 A_pro A_Program(A_pos pos, table_t name, A_routine routine)
 {
@@ -87,7 +88,7 @@ A_dec A_RoutinePartDec(A_pos pos, A_routine_part routine)
 A_const A_Integer(A_pos pos, int i)
 {
 	A_const p = (A_const)checked_malloc(sizeof(*p));
-	p->kind = Ty_integer;
+	p->kind = TY_INTEGER;
 	p->pos = pos;
 	p->u.integer = i;
 	return p;
@@ -96,7 +97,7 @@ A_const A_Integer(A_pos pos, int i)
 A_const A_Real(A_pos pos, double r)
 {
 	A_const p = (A_const)checked_malloc(sizeof(*p));
-	p->kind = Ty_real;
+	p->kind = TY_REAL;
 	p->pos = pos;
 	p->u.real = r;
 	return p;
@@ -105,7 +106,7 @@ A_const A_Real(A_pos pos, double r)
 A_const A_Char(A_pos pos, char c)
 {
 	A_const p = (A_const)checked_malloc(sizeof(*p));
-	p->kind = Ty_char;
+	p->kind = TY_CHAR;
 	p->pos = pos;
 	p->u.ch = c;
 	return p;
@@ -114,7 +115,7 @@ A_const A_Char(A_pos pos, char c)
 A_const A_String(A_pos pos, char *s)
 {
 	A_const p = (A_const)checked_malloc(sizeof(*p));
-	p->kind = Ty_string;
+	p->kind = TY_STRING;
 	p->pos = pos;
 	p->u.str = s;
 	return p;
@@ -123,7 +124,7 @@ A_const A_String(A_pos pos, char *s)
 A_const A_Bool(A_pos pos, int b)
 {
 	A_const p = (A_const)checked_malloc(sizeof(*p));
-	p->kind = Ty_boolean;
+	p->kind = TY__BOOLEAN;
 	p->pos = pos;
 	p->u.boolean = b;
 	return p;

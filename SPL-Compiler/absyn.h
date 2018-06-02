@@ -6,7 +6,7 @@
  */
 
 #include "symbol.h"
-#include "type.h"
+#include "types.h"
 
 #ifndef _ABSYN_H
 #define _ABSYN_H
@@ -50,13 +50,7 @@ typedef struct A_caseStmt_st {A_exp test; A_caseList caselist;} A_caseS;
 typedef struct A_gotoStmt_st {int label;} A_gotoS;
 typedef struct A_op_st {A_operation oper; A_exp left; A_exp right;} *A_op;
 
-typedef enum {
-	boolean = 1,
-	character = 2,
-	integer = 3,
-	real = 4,
-	string = 5,
-} A_sysType;
+typedef Ty_ty A_sysType;
 
 typedef enum {
 	A_plusOp, 
