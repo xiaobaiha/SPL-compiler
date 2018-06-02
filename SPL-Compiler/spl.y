@@ -86,6 +86,7 @@ type_decl:
     |  array_type_decl { 
     }
     |  record_type_decl { 
+        printf("")
     };
 simple_type_decl: 
     SYS_TYPE { 
