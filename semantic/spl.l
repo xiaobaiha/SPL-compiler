@@ -1,5 +1,5 @@
 %{  
-#include <stdio.h>  
+#include <stdio.h> 
 #include "token.h"
 #include "y.tab.h"
 
@@ -9,6 +9,7 @@ int yylex(void);
 int yyerror(char *s);
 void init_scanner();
 void lex_error(char* msg, int line);
+
 %}
 delim   [" "\t]
 whitespace  {delim}+

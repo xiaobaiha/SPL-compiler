@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tree.h"
+#include "symbol.h"
 
 extern FILE *yyin;
 int yylex(void);
 void yyerror(char *s);
 %}
 
+%locations
 
 %token NAME
 
@@ -84,6 +86,7 @@ type_decl:
     |  array_type_decl { 
     }
     |  record_type_decl { 
+        printf("")
     };
 simple_type_decl: 
     SYS_TYPE { 
