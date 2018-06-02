@@ -1,6 +1,6 @@
 CC = gcc
 OUT = tcc
-OBJ = lex.yy.o y.tab.o util.o error.o symbol.o
+OBJ = lex.yy.o y.tab.o util.o error.o symbol.o types.o
 SCANNER = spl.l
 PARSER = spl.y
 
@@ -14,6 +14,9 @@ clean:
 
 $(OUT): $(OBJ)
 	$(CC) -o $(OUT) $(OBJ)
+
+types.o: types.c types.h symbol.h util.h
+	$(CC) -g -c types.c
 
 symbol.o: symbol.c symbol.h util.h
 	$(CC) -g -c symbol.c
