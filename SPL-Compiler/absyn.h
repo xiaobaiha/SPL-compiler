@@ -49,8 +49,7 @@ typedef struct A_forStmt_st {A_var var; A_exp initValue; int direction; A_exp fi
 typedef struct A_caseStmt_st {A_exp test; A_caseList caselist;} A_caseS;
 typedef struct A_gotoStmt_st {int label;} A_gotoS;
 typedef struct A_op_st {A_operation oper; A_exp left; A_exp right;} *A_op;
-
-typedef Ty_ty A_sysType;
+typedef Ty_kind A_sysType;
 
 typedef enum {
 	A_plusOp, 
