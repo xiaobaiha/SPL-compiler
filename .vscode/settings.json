@@ -3,6 +3,10 @@
     "absyn.h": "c",
     "error.h": "c",
     "stddef.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "symbol.h": "c",
+    "types.h": "c",
+    "util.h": "c",
+    "errno.h": "c"
   }
 }

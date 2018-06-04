@@ -610,8 +610,11 @@ char *yytext;
 #include <stdbool.h>
 #include <stdarg.h>  
 #include "token.h"
+#include "absyn.h"
 #include "y.tab.h"
 #include "error.h"
+#include "util.h"
+
 
 int cur_line_num = 1;
 int yycolumn = 1;
@@ -622,7 +625,7 @@ int yyerror(char *s);
 void init_scanner();
 void lex_error(char* msg, int line);
 void NewLine();
-void adjust(void);
+void adjust(char* text);
 
 int install_str(); 
 
@@ -630,7 +633,7 @@ int install_str();
     yylloc.first_column = yycolumn; yylloc.last_column = yycolumn + yyleng - 1; \
     yycolumn += yyleng; \
 
-#line 634 "lex.yy.c"
+#line 637 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -848,9 +851,9 @@ YY_DECL
 		}
 
 	{
-#line 92 "spl.l"
+#line 95 "spl.l"
 
-#line 854 "lex.yy.c"
+#line 857 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -920,311 +923,311 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 93 "spl.l"
-{ adjust(); EM_newline(); cur_line_num++;}
+#line 96 "spl.l"
+{ adjust(yytext); lex_newline(); cur_line_num++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 94 "spl.l"
+#line 97 "spl.l"
 {/* do nothing*/}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 95 "spl.l"
-{ adjust();/* ignore comments */}
+#line 98 "spl.l"
+{ adjust(yytext);/* ignore comments */}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 97 "spl.l"
-{ adjust();return LP;}
+#line 100 "spl.l"
+{ adjust(yytext);return LP;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 98 "spl.l"
-{ adjust();return RP;}
+#line 101 "spl.l"
+{ adjust(yytext);return RP;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 99 "spl.l"
-{ adjust();return LB;}
+#line 102 "spl.l"
+{ adjust(yytext);return LB;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 100 "spl.l"
-{ adjust();return RB;}
+#line 103 "spl.l"
+{ adjust(yytext);return RB;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 101 "spl.l"
-{ adjust();return DOT;}
+#line 104 "spl.l"
+{ adjust(yytext);return DOT;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 102 "spl.l"
-{ adjust();return COMMA;}
+#line 105 "spl.l"
+{ adjust(yytext);return COMMA;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 103 "spl.l"
-{ adjust();return COLON;}
+#line 106 "spl.l"
+{ adjust(yytext);return COLON;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 104 "spl.l"
-{ adjust();return MUL;}
+#line 107 "spl.l"
+{ adjust(yytext);return MUL;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 105 "spl.l"
-{ adjust();return DIV;}
+#line 108 "spl.l"
+{ adjust(yytext);return DIV;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 106 "spl.l"
-{ adjust();return UNEQUAL;}
+#line 109 "spl.l"
+{ adjust(yytext);return UNEQUAL;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 107 "spl.l"
-{ adjust();return READ;}
+#line 110 "spl.l"
+{ adjust(yytext);return READ;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 108 "spl.l"
-{ adjust();return NOT;}
+#line 111 "spl.l"
+{ adjust(yytext);return NOT;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 109 "spl.l"
-{ adjust();return PLUS;}
+#line 112 "spl.l"
+{ adjust(yytext);return PLUS;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 110 "spl.l"
-{ adjust();return MINUS;}
+#line 113 "spl.l"
+{ adjust(yytext);return MINUS;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 111 "spl.l"
-{ adjust();return GE;}
+#line 114 "spl.l"
+{ adjust(yytext);return GE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 112 "spl.l"
-{ adjust();return GT;}
+#line 115 "spl.l"
+{ adjust(yytext);return GT;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 113 "spl.l"
-{ adjust();return LE;}
+#line 116 "spl.l"
+{ adjust(yytext);return LE;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 114 "spl.l"
-{ adjust();return LT;}
+#line 117 "spl.l"
+{ adjust(yytext);return LT;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 115 "spl.l"
-{ adjust();return EQUAL;}
+#line 118 "spl.l"
+{ adjust(yytext);return EQUAL;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 116 "spl.l"
-{ adjust();return ASSIGN;}
+#line 119 "spl.l"
+{ adjust(yytext);return ASSIGN;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 117 "spl.l"
-{ adjust();return MOD;}
+#line 120 "spl.l"
+{ adjust(yytext);return MOD;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 118 "spl.l"
-{ adjust();return DOTDOT;}
+#line 121 "spl.l"
+{ adjust(yytext);return DOTDOT;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 119 "spl.l"
-{ adjust();return SEMI;}
+#line 122 "spl.l"
+{ adjust(yytext);return SEMI;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 120 "spl.l"
-{ adjust();return AND;}
+#line 123 "spl.l"
+{ adjust(yytext);return AND;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 121 "spl.l"
-{ adjust();return ARRAY;}
+#line 124 "spl.l"
+{ adjust(yytext);return ARRAY;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 122 "spl.l"
-{ adjust();return BEGIN_TOKEN;}
+#line 125 "spl.l"
+{ adjust(yytext);return BEGIN_TOKEN;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 123 "spl.l"
-{ adjust();return CASE;}
+#line 126 "spl.l"
+{ adjust(yytext);return CASE;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 124 "spl.l"
-{ adjust();return CONST;}
+#line 127 "spl.l"
+{ adjust(yytext);return CONST;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 125 "spl.l"
-{ adjust();return DO;}
+#line 128 "spl.l"
+{ adjust(yytext);return DO;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 126 "spl.l"
-{ adjust();return DOWNTO;}
+#line 129 "spl.l"
+{ adjust(yytext);return DOWNTO;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 127 "spl.l"
-{ adjust();return ELSE;}
+#line 130 "spl.l"
+{ adjust(yytext);return ELSE;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 128 "spl.l"
-{ adjust();return END;}
+#line 131 "spl.l"
+{ adjust(yytext);return END;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 129 "spl.l"
-{ adjust();return FOR;}
+#line 132 "spl.l"
+{ adjust(yytext);return FOR;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 130 "spl.l"
-{ adjust();return FUNCTION;}
+#line 133 "spl.l"
+{ adjust(yytext);return FUNCTION;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 131 "spl.l"
-{ adjust();return GOTO;}
+#line 134 "spl.l"
+{ adjust(yytext);return GOTO;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 132 "spl.l"
-{ adjust();return IF;}
+#line 135 "spl.l"
+{ adjust(yytext);return IF;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 133 "spl.l"
-{ adjust();return OF;}
+#line 136 "spl.l"
+{ adjust(yytext);return OF;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 134 "spl.l"
-{ adjust();return OR;}
+#line 137 "spl.l"
+{ adjust(yytext);return OR;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 135 "spl.l"
-{ adjust();return PROCEDURE;}
+#line 138 "spl.l"
+{ adjust(yytext);return PROCEDURE;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 136 "spl.l"
-{ adjust();return PROGRAM;}
+#line 139 "spl.l"
+{ adjust(yytext);return PROGRAM;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 137 "spl.l"
-{ adjust();return RECORD;}
+#line 140 "spl.l"
+{ adjust(yytext);return RECORD;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 138 "spl.l"
-{ adjust();return REPEAT;}
+#line 141 "spl.l"
+{ adjust(yytext);return REPEAT;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 139 "spl.l"
-{ adjust();return THEN;}
+#line 142 "spl.l"
+{ adjust(yytext);return THEN;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 140 "spl.l"
-{ adjust();return TO;}
+#line 143 "spl.l"
+{ adjust(yytext);return TO;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 141 "spl.l"
-{ adjust();return TYPE;}
+#line 144 "spl.l"
+{ adjust(yytext);return TYPE;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 142 "spl.l"
-{ adjust();return UNTIL;}
+#line 145 "spl.l"
+{ adjust(yytext);return UNTIL;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 143 "spl.l"
-{ adjust();return VAR;}
+#line 146 "spl.l"
+{ adjust(yytext);return VAR;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 144 "spl.l"
-{ adjust();return WHILE;}
+#line 147 "spl.l"
+{ adjust(yytext);return WHILE;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 146 "spl.l"
-{ adjust();return SYS_CON;}
+#line 149 "spl.l"
+{ adjust(yytext);return SYS_CON;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 147 "spl.l"
-{ adjust();return SYS_FUNCT;}   
+#line 150 "spl.l"
+{ adjust(yytext);return SYS_FUNCT;}   
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 148 "spl.l"
-{ adjust();return SYS_PROC;}
+#line 151 "spl.l"
+{ adjust(yytext);return SYS_PROC;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 149 "spl.l"
-{ adjust();return SYS_TYPE;}
+#line 152 "spl.l"
+{ adjust(yytext);return SYS_TYPE;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 151 "spl.l"
-{ adjust();return NAME;}
+#line 154 "spl.l"
+{ adjust(yytext);return NAME;}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 152 "spl.l"
-{ adjust();return install_str();}
+#line 155 "spl.l"
+{ adjust(yytext);return install_str();}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 153 "spl.l"
-{ adjust();return INTEGER;}
+#line 156 "spl.l"
+{ adjust(yytext);return INTEGER;}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 154 "spl.l"
-{ adjust();return REAL;}
+#line 157 "spl.l"
+{ adjust(yytext);return REAL;}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 156 "spl.l"
-{ adjust();EM_error(EM_tokPos, "Illegal Token!");}
+#line 159 "spl.l"
+{ adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 158 "spl.l"
+#line 161 "spl.l"
 ECHO;
 	YY_BREAK
-#line 1228 "lex.yy.c"
+#line 1231 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2237,14 +2240,13 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 158 "spl.l"
+#line 161 "spl.l"
 
 
 
 int yywrap(void){charPos=1;return 1;} 
 
-int install_str() {
-	/* string max length = 15 */
+int install_str(){
 	
 	int len = 0;
 	char c;
@@ -2268,8 +2270,18 @@ void NewLine(){
 	yycolumn = 0;
 }
 
-void adjust(void)
+void adjust(char* text)
 {
+	//yylloc.first_line = cur_line_num;
+	//yylloc.first_column = startColNum;
+	//yylloc.last_line = rowNum;
+	//yylloc.last_column = endColNum;
+	if(DEBUG){
+		printf("Token '%s' at %d:%d-%d\n", text,
+						yylloc.first_line,
+                        yylloc.first_column,
+                        yylloc.last_column);
+	}
     EM_tokPos=charPos;
     charPos+=yyleng;
 }

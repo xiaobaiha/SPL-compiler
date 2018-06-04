@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "error.h"
 #include "util.h"
+#include "absyn.h"
+#include "y.tab.h"
 
 Bool anyErrors = (char *)FALSE;
 
@@ -16,22 +18,34 @@ extern FILE *yyin;
 
 typedef struct intList {int i; struct intList *rest;} *IntList;
 
+//支持可变参数
+void fatal_error(const char *fmt, ... )
+{
+	va_list vl;
+  
+	va_start(vl,fmt);
+	vfprintf(stderr,fmt,vl);
+	va_end(vl);
+	fprintf(stderr,"at line number:\n");
+	exit(1);
+}
+
 static IntList intList(int i, IntList rest) 
 {
-	IntList l= checked_malloc(sizeof *l);
+	IntList l= checked_malloc(sizeof(*l));
  	l->i=i; l->rest=rest;
  	return l;
 }
 
 static IntList linePos=NULL;
 
-void EM_newline(void)
+void lex_newline(void)
 {
 	lineNum++;
  	linePos = intList(EM_tokPos, linePos);
 }
 
-void EM_error(int pos, char *message,...)
+void general_error(int pos, char *message,...)
 {
 	va_list ap;
  	IntList lines = linePos; 
@@ -43,8 +57,7 @@ void EM_error(int pos, char *message,...)
 
 	if (fileName) 
 		fprintf(stderr,"%s:",fileName);
-	if (lines) 
-		fprintf(stderr,"at line number: %d.%d: \n", num, pos-lines->i);
+	fprintf(stderr,"at line number: %d.%d: ", num, pos-lines->i);
 	va_start(ap,message);
 	vfprintf(stderr, message, ap);
 	va_end(ap);
@@ -60,19 +73,17 @@ void EM_reset(string fname)
 	linePos=intList(0,NULL);
 	yyin = fopen(fname,"r");
 	if (!yyin) {
-		EM_error(0,"cannot open"); 
+		general_error(0,"cannot open"); 
 		exit(1);
 	}
 }
 
-//支持可变参数
-void fatal_error(const char *fmt, ... )
-{
-	va_list vl;
-  
-	va_start(vl,fmt);
-	vfprintf(stderr,fmt,vl);
-	va_end(vl);
-	fprintf(stderr,"at line number:\n");
-	exit(1);
+void lexError(int lineCnt, int tok, char *message, ...) {
+	//printf("at line %d\n", lineCnt);
+	//general_error(tok, message);
+	//fprintf(stderr,"at line number: %d.%s: \n", lineCnt, message);
+	va_list ap;
+	va_start(ap, message);
+	general_error(tok, message);
+	va_end(ap);
 }

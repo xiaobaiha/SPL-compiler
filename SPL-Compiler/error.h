@@ -4,15 +4,17 @@
 
 extern char EM_anyErrors;
 
-void EM_newline(void);
+void lex_newline(void);
 
 extern int EM_tokPos;
 
-void EM_error(int, char *,...);
+void general_error(int, char *,...);
 //void EM_lex_error(char *message, ...);
 void EM_impossible(char *,...);
 void EM_reset(char * filename);
 
 void fatal_error(const char *fmt, ... );
+
+void lexError(int, int ,char *,...);
 
 //#endif

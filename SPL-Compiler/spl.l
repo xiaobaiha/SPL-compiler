@@ -3,8 +3,11 @@
 #include <stdbool.h>
 #include <stdarg.h>  
 #include "token.h"
+#include "absyn.h"
 #include "y.tab.h"
 #include "error.h"
+#include "util.h"
+
 
 int cur_line_num = 1;
 int yycolumn = 1;
@@ -15,7 +18,7 @@ int yyerror(char *s);
 void init_scanner();
 void lex_error(char* msg, int line);
 void NewLine();
-void adjust(void);
+void adjust(char* text);
 
 int install_str(); 
 
@@ -90,77 +93,76 @@ sys_type    "boolean"|"char"|"integer"|"real"
 
 name    [a-zA-Z][_a-zA-Z0-9]*
 %%
-[\n]    { adjust(); EM_newline(); cur_line_num++;}
+[\n]    { adjust(yytext); lex_newline(); cur_line_num++;}
 {whitespace} {/* do nothing*/}
-"{"[^{}]*"}" 	{ adjust();/* ignore comments */}
+"{"[^{}]*"}" 	{ adjust(yytext);/* ignore comments */}
 
-{lp}    { adjust();return LP;}
-{rp}    { adjust();return RP;}
-{lb}    { adjust();return LB;}
-{rb}    { adjust();return RB;}
-{dot}   { adjust();return DOT;}
-{comma} { adjust();return COMMA;}
-{colon} { adjust();return COLON;}
-{mul}   { adjust();return MUL;}
-{div}   { adjust();return DIV;}
-{unequal}   { adjust();return UNEQUAL;}
-{read}        { adjust();return READ;}
-{not}   { adjust();return NOT;}
-{plus}  { adjust();return PLUS;}
-{minus} { adjust();return MINUS;}
-{ge}    { adjust();return GE;}
-{gt}    { adjust();return GT;}
-{le}    { adjust();return LE;}
-{lt}    { adjust();return LT;}
-{equal} { adjust();return EQUAL;}
-{assign}    { adjust();return ASSIGN;}
-{mod}   { adjust();return MOD;}
-{dotdot}    { adjust();return DOTDOT;}
-{semi}  { adjust();return SEMI;}
-{and}   { adjust();return AND;}
-{array} { adjust();return ARRAY;}
-{begin} { adjust();return BEGIN_TOKEN;}
-{case}  { adjust();return CASE;}
-{const} { adjust();return CONST;}
-{do}    { adjust();return DO;}
-{downto}    { adjust();return DOWNTO;}
-{else}  { adjust();return ELSE;}
-{end}   { adjust();return END;}
-{for}   { adjust();return FOR;}
-{function}  { adjust();return FUNCTION;}
-{goto}  { adjust();return GOTO;}
-{if}    { adjust();return IF;}
-{of}    { adjust();return OF;}
-{or}    { adjust();return OR;}
-{procedure} { adjust();return PROCEDURE;}
-{program}   { adjust();return PROGRAM;}
-{record}    { adjust();return RECORD;}
-{repeat}    { adjust();return REPEAT;}
-{then}  { adjust();return THEN;}
-{to}    { adjust();return TO;}
-{type}  { adjust();return TYPE;}
-{until} { adjust();return UNTIL;}
-{var}   { adjust();return VAR;}
-{while} { adjust();return WHILE;}
+{lp}    { adjust(yytext);return LP;}
+{rp}    { adjust(yytext);return RP;}
+{lb}    { adjust(yytext);return LB;}
+{rb}    { adjust(yytext);return RB;}
+{dot}   { adjust(yytext);return DOT;}
+{comma} { adjust(yytext);return COMMA;}
+{colon} { adjust(yytext);return COLON;}
+{mul}   { adjust(yytext);return MUL;}
+{div}   { adjust(yytext);return DIV;}
+{unequal}   { adjust(yytext);return UNEQUAL;}
+{read}        { adjust(yytext);return READ;}
+{not}   { adjust(yytext);return NOT;}
+{plus}  { adjust(yytext);return PLUS;}
+{minus} { adjust(yytext);return MINUS;}
+{ge}    { adjust(yytext);return GE;}
+{gt}    { adjust(yytext);return GT;}
+{le}    { adjust(yytext);return LE;}
+{lt}    { adjust(yytext);return LT;}
+{equal} { adjust(yytext);return EQUAL;}
+{assign}    { adjust(yytext);return ASSIGN;}
+{mod}   { adjust(yytext);return MOD;}
+{dotdot}    { adjust(yytext);return DOTDOT;}
+{semi}  { adjust(yytext);return SEMI;}
+{and}   { adjust(yytext);return AND;}
+{array} { adjust(yytext);return ARRAY;}
+{begin} { adjust(yytext);return BEGIN_TOKEN;}
+{case}  { adjust(yytext);return CASE;}
+{const} { adjust(yytext);return CONST;}
+{do}    { adjust(yytext);return DO;}
+{downto}    { adjust(yytext);return DOWNTO;}
+{else}  { adjust(yytext);return ELSE;}
+{end}   { adjust(yytext);return END;}
+{for}   { adjust(yytext);return FOR;}
+{function}  { adjust(yytext);return FUNCTION;}
+{goto}  { adjust(yytext);return GOTO;}
+{if}    { adjust(yytext);return IF;}
+{of}    { adjust(yytext);return OF;}
+{or}    { adjust(yytext);return OR;}
+{procedure} { adjust(yytext);return PROCEDURE;}
+{program}   { adjust(yytext);return PROGRAM;}
+{record}    { adjust(yytext);return RECORD;}
+{repeat}    { adjust(yytext);return REPEAT;}
+{then}  { adjust(yytext);return THEN;}
+{to}    { adjust(yytext);return TO;}
+{type}  { adjust(yytext);return TYPE;}
+{until} { adjust(yytext);return UNTIL;}
+{var}   { adjust(yytext);return VAR;}
+{while} { adjust(yytext);return WHILE;}
 
-{sys_con}   { adjust();return SYS_CON;}
-{sys_funct} { adjust();return SYS_FUNCT;}   
-{sys_proc}  { adjust();return SYS_PROC;}
-{sys_type}  { adjust();return SYS_TYPE;}
+{sys_con}   { adjust(yytext);return SYS_CON;}
+{sys_funct} { adjust(yytext);return SYS_FUNCT;}   
+{sys_proc}  { adjust(yytext);return SYS_PROC;}
+{sys_type}  { adjust(yytext);return SYS_TYPE;}
 
-{name}  { adjust();return NAME;}
-{string}	{ adjust();return install_str();}
-{integer}   { adjust();return INTEGER;}
-{real}  { adjust();return REAL;}
+{name}  { adjust(yytext);return NAME;}
+{string}	{ adjust(yytext);return install_str();}
+{integer}   { adjust(yytext);return INTEGER;}
+{real}  { adjust(yytext);return REAL;}
 
-.   { adjust();EM_error(EM_tokPos, "Illegal Token!");}
+.   { adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");}
 
 %%
 
 int yywrap(void){charPos=1;return 1;} 
 
-int install_str() {
-	/* string max length = 15 */
+int install_str(){
 	
 	int len = 0;
 	char c;
@@ -184,8 +186,18 @@ void NewLine(){
 	yycolumn = 0;
 }
 
-void adjust(void)
+void adjust(char* text)
 {
+	//yylloc.first_line = cur_line_num;
+	//yylloc.first_column = startColNum;
+	//yylloc.last_line = rowNum;
+	//yylloc.last_column = endColNum;
+	if(DEBUG){
+		printf("Token '%s' at %d:%d-%d\n", text,
+						yylloc.first_line,
+                        yylloc.first_column,
+                        yylloc.last_column);
+	}
     EM_tokPos=charPos;
     charPos+=yyleng;
 }

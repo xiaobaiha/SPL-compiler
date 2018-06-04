@@ -5,11 +5,12 @@
  * Linked list types end with "..List"
  */
 
-#include "symbol.h"
-#include "types.h"
-
 #ifndef _ABSYN_H
 #define _ABSYN_H
+
+
+#include "symbol.h"
+#include "types.h"
 
 /* Type Definitions */
 typedef struct A_pro_ *A_pro;
@@ -49,6 +50,9 @@ typedef struct A_caseStmt_  A_caseStatement;
 typedef struct A_gotoStmt_ A_goto;
 typedef struct A_op_* A_op;
 typedef Ty_kind A_sysType;
+
+
+
 typedef enum
 {
   A_plusOp,
