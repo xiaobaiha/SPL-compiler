@@ -12,7 +12,6 @@
 #define _ABSYN_H
 
 /* Type Definitions */
-typedef int A_pos;
 typedef struct A_pro_ *A_pro;
 typedef struct A_routine_ *A_routine;
 typedef struct A_routine_head_ *A_routine_head;
@@ -127,21 +126,18 @@ struct A_op_
 
 struct A_pro_
 {
-  A_pos pos;
   table_t name;
   A_routine routine;
 };
 
 struct A_routine_
 {
-  A_pos pos;
   A_routine_head head;
   A_stmtList compoundStmt;
 };
 
 struct A_routine_head_
 {
-  A_pos pos;
   A_decList constPart;
   A_decList typePart;
   A_decList varPart;
@@ -157,7 +153,6 @@ struct A_dec_
     A_varDec,
     A_routineDec,
   } kind;
-  A_pos pos;
   table_t name;
   union {
     A_const value;
@@ -169,7 +164,6 @@ struct A_dec_
 
 struct A_const_
 {
-  A_pos pos;
   A_sysType kind;
   union {
     int integer;
@@ -192,14 +186,12 @@ struct A_range_
     A_constRange,
     A_nameRange
   } kind;
-  A_pos pos;
   A_range_value lower_value;
   A_range_value upper_value;
 };
 
 struct A_simple_type_
 {
-  A_pos pos;
   enum
   {
     A_simpleSysType,
@@ -217,7 +209,6 @@ struct A_simple_type_
 
 struct A_array_
 {
-  A_pos pos;
   A_range range;
   A_type type;
 };
@@ -230,7 +221,6 @@ struct A_type_
     A_arrayType,
     A_recordType
   } kind;
-  A_pos pos;
   union {
     A_simple_type simple;
     A_array array;
@@ -240,27 +230,23 @@ struct A_type_
 
 struct A_name_
 {
-  A_pos pos;
   table_t name;
 };
 
 struct A_field_
 {
-  A_pos pos;
   A_nameList name_list;
   A_type type_decl;
 };
 
 struct A_varDecList_
 {
-  A_pos pos;
   A_nameList name_list;
   A_type type_decl;
 };
 
 struct A_routine_part_head_
 {
-  A_pos pos;
   table_t name;
   A_paraList parameters;
   A_simple_type simpleType;
@@ -281,7 +267,6 @@ struct A_paraList_
 struct A_paraField_
 {
   enum{Var_type, Value_type} kind;
-  A_pos pos;
   A_simple_type simpleType;
   A_nameList nameList;
 };
@@ -300,7 +285,6 @@ struct A_stmt_
     A_caseStmt,
     A_gotoStmt
   } kind;
-  A_pos pos;
   int label;
   union {
     A_assign assignStmt;
@@ -317,7 +301,6 @@ struct A_stmt_
 
 struct A_case_
 {
-  A_pos pos;
   A_const constValue;
   table_t name;
   A_stmt body;
@@ -333,7 +316,6 @@ struct A_exp_
     A_constExp,
     A_opExp
   } kind;
-  A_pos pos;
   A_type valueType;
   union {
     A_proc func;
@@ -347,7 +329,6 @@ struct A_exp_
 struct A_proc_
 {
   int kind;
-  A_pos pos;
   table_t name;
   A_expList args;
 };
@@ -405,64 +386,64 @@ struct A_expList_
 };
 
 // Function declaration
-A_pro A_Fuction_Program(A_pos pos, table_t name, A_routine routine);
-A_routine A_Fuction_Routine(A_pos pos, A_routine_head head, A_stmtList compoundStmt);
-A_routine_head A_Routine_head(A_pos pos, A_decList constPart, A_decList typePart, A_decList varPart, A_decList routinePart);
+A_pro A_Fuction_Program(table_t name, A_routine routine);
+A_routine A_Fuction_Routine(A_routine_head head, A_stmtList compoundStmt);
+A_routine_head A_Routine_head(A_decList constPart, A_decList typePart, A_decList varPart, A_decList routinePart);
 A_decList A_Fuction_DecList(A_dec head, A_decList next);
-A_dec A_Fuction_ConstDec(A_pos pos, table_t name, A_const value);
-A_const A_Fuction_Integer(A_pos pos, int i);
-A_const A_Fuction_Real(A_pos pos, double r);
-A_const A_Fuction_Char(A_pos pos, char c);
-A_const A_Fuction_String(A_pos pos, char *s);
-A_const A_Fuction_Bool(A_pos pos, int b);
-A_dec A_Fuction_TypeDec(A_pos pos, table_t name, A_type type);
-A_type A_Fuction_SimpleType(A_pos pos, A_simple_type simple);
-A_simple_type A_Fuction_SimpleSysType(A_pos pos, A_sysType systype);
-A_simple_type A_Fuction_SimpleRangeType(A_pos pos, A_range range);
-A_simple_type A_Fuction_SimpleNameType(A_pos pos, table_t name);
-A_simple_type A_Fuction_SimpleNameListType(A_pos pos, A_nameList namelist);
-A_range A_Fuction_ConstRange(A_pos pos, A_const lo, A_const up);
-A_range A_Fuction_NameRange(A_pos pos, table_t lo, table_t up);
+A_dec A_Fuction_ConstDec(table_t name, A_const value);
+A_const A_Fuction_Integer(int i);
+A_const A_Fuction_Real(double r);
+A_const A_Fuction_Char(char c);
+A_const A_Fuction_String(char *s);
+A_const A_Fuction_Bool(int b);
+A_dec A_Fuction_TypeDec(table_t name, A_type type);
+A_type A_Fuction_SimpleType(A_simple_type simple);
+A_simple_type A_Fuction_SimpleSysType(A_sysType systype);
+A_simple_type A_Fuction_SimpleRangeType(A_range range);
+A_simple_type A_Fuction_SimpleNameType(table_t name);
+A_simple_type A_Fuction_SimpleNameListType(A_nameList namelist);
+A_range A_Fuction_ConstRange(A_const lo, A_const up);
+A_range A_Fuction_NameRange(table_t lo, table_t up);
 A_nameList A_Fuction_NameList(A_name head, A_nameList next);
-A_name A_Fuction_Name(A_pos pos, table_t name);
-A_array A_Fuction_Array(A_pos pos, A_range range, A_type type);
-A_type A_Fuction_ArrayType(A_pos pos, A_array array);
-A_type A_Fuction_RecordType(A_pos pos, A_fieldList fieldList);
+A_name A_Fuction_Name(table_t name);
+A_array A_Fuction_Array(A_range range, A_type type);
+A_type A_Fuction_ArrayType(A_array array);
+A_type A_Fuction_RecordType(A_fieldList fieldList);
 A_fieldList A_Fuction_FieldList(A_field head, A_fieldList next);
-A_field A_Fuction_Field(A_pos pos, A_nameList nameList, A_type type);
-A_dec A_Fuction_VarDec(A_pos pos, A_varDecList var);
-A_varDecList A_Fuction_VarDecList(A_pos pos, A_nameList nameList, A_type type);
-A_dec A_Fuction_RoutinePartDec(A_pos pos, A_routine_part routine);
+A_field A_Fuction_Field(A_nameList nameList, A_type type);
+A_dec A_Fuction_VarDec(A_varDecList var);
+A_varDecList A_Fuction_VarDecList(A_nameList nameList, A_type type);
+A_dec A_Fuction_RoutinePartDec(A_routine_part routine);
 A_routine_part A_Fuction_RoutinePart(A_routine_part_head head, A_routine subRoutine);
-A_routine_part_head A_Fuction_FuncHead(A_pos pos, table_t name, A_paraList parameters, A_simple_type simpleType);
-A_routine_part_head A_Fuction_ProcHead(A_pos pos, table_t name, A_paraList parameters);
+A_routine_part_head A_Fuction_FuncHead(table_t name, A_paraList parameters, A_simple_type simpleType);
+A_routine_part_head A_Fuction_ProcHead(table_t name, A_paraList parameters);
 A_paraList A_Fuction_ParaList(A_paraField field, A_paraList next);
-A_paraField A_Fuction_VarParaField(A_pos pos, A_nameList nameList, A_simple_type simpleType);
-A_paraField A_Fuction_ValParaField(A_pos pos, A_nameList nameList, A_simple_type simpleType);
-A_var A_Fuction_Var(A_pos pos, table_t ID);
-A_var A_Fuction_ArrayElement(A_pos pos, table_t ID, A_exp subscript);
-A_var A_Fuction_RecordField(A_pos pos, table_t ID, table_t fieldID);
-A_proc A_Fuction_Proc(A_pos pos, table_t function, A_expList args);
+A_paraField A_Fuction_VarParaField(A_nameList nameList, A_simple_type simpleType);
+A_paraField A_Fuction_ValParaField(A_nameList nameList, A_simple_type simpleType);
+A_var A_Fuction_Var(table_t ID);
+A_var A_Fuction_ArrayElement(table_t ID, A_exp subscript);
+A_var A_Fuction_RecordField(table_t ID, table_t fieldID);
+A_proc A_Fuction_Proc(table_t function, A_expList args);
 // Statement
 A_stmtList A_Fuction_StatementList(A_stmt head, A_stmtList next);
-A_stmt A_Fuction_LabelStatement(A_pos pos, int label, A_stmt stmt);
-A_stmt A_Fuction_AssignStatement(A_pos pos, A_var var, A_exp exp);
-A_stmt A_Fuction_ProcStatement(A_pos pos, A_proc proc);
-A_stmt A_Fuction_CompoundStatement(A_pos pos, A_stmtList substmtList);
-A_stmt A_Fuction_IfStatement(A_pos pos, A_exp test, A_stmt thenStmt, A_stmt elseStmt);
-A_stmt A_Fuction_RepeatStatement(A_pos pos, A_exp test, A_stmtList body);
-A_stmt A_Fuction_WhileStatement(A_pos pos, A_exp test, A_stmt body);
-A_stmt A_Fuction_ForStatement(A_pos pos, A_var var, A_exp initValue, int direction, A_exp finalValue, A_stmt body);
-A_stmt A_Fuction_CaseStatement(A_pos pos, A_exp test, A_caseList caselist);
-A_stmt A_Fuction_GotoStatement(A_pos pos, int label);
+A_stmt A_Fuction_LabelStatement(int label, A_stmt stmt);
+A_stmt A_Fuction_AssignStatement(A_var var, A_exp exp);
+A_stmt A_Fuction_ProcStatement(A_proc proc);
+A_stmt A_Fuction_CompoundStatement(A_stmtList substmtList);
+A_stmt A_Fuction_IfStatement(A_exp test, A_stmt thenStmt, A_stmt elseStmt);
+A_stmt A_Fuction_RepeatStatement(A_exp test, A_stmtList body);
+A_stmt A_Fuction_WhileStatement(A_exp test, A_stmt body);
+A_stmt A_Fuction_ForStatement(A_var var, A_exp initValue, int direction, A_exp finalValue, A_stmt body);
+A_stmt A_Fuction_CaseStatement(A_exp test, A_caseList caselist);
+A_stmt A_Fuction_GotoStatement(int label);
 A_caseList A_Fuction_CaseList(A_case head, A_caseList next);
-A_case A_Fuction_Case(A_pos pos, A_const constValue, table_t name, A_stmt body); // const or name
+A_case A_Fuction_Case(A_const constValue, table_t name, A_stmt body); // const or name
 // Expression
 A_expList A_Fuction_ExpList(A_exp head, A_expList next);
-A_exp A_Fuction_NameExp(A_pos pos, table_t name);
-A_exp A_Fuction_VarExp(A_pos pos, A_var var);
-A_exp A_Fuction_FuncExp(A_pos pos, A_proc func);
-A_exp A_Fuction_ConstExp(A_pos pos, A_const constValue);
-A_exp A_Fuction_OpExp(A_pos pos, A_operation oper, A_exp left, A_exp right);
+A_exp A_Fuction_NameExp(table_t name);
+A_exp A_Fuction_VarExp(A_var var);
+A_exp A_Fuction_FuncExp(A_proc func);
+A_exp A_Fuction_ConstExp(A_const constValue);
+A_exp A_Fuction_OpExp(A_operation oper, A_exp left, A_exp right);
 
 #endif
