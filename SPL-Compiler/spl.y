@@ -75,32 +75,34 @@ void yyerror(char *s);
 %token<sys_funct> SYS_FUNCT
 %token<sys_proc> SYS_PROC
 
-%type<s_symbol> ID program_head 
+%type<s_symbol> program_head 
 %type<a_pro> program_stmt 
 %type<a_routine> routine sub_routine
 %type<a_routine_head> routine_head
 %type<a_stmtList> stmt_list routine_body
-%type<a_decList> const_part type_part var_part routine_part const_expr_list type_decl_list var_decl_list
-%type<a_dec> const_dec type_definition
+%type<a_decList> const_part type_part var_part routine_part const_expr_list type_decl_list var_decl_list routine_decl_list
+%type<a_dec> type_definition
 %type<a_const> const_value
 %type<a_type> type_decl
 %type<a_simple_type> simple_type_decl
 %type<a_array> array_type_decl
 %type<a_fieldList> record_type_decl field_decl_list
-%type<a_nameList> name_list var_para_list val_para_list
-%type<a_range> array_type_range_decl
+%type<a_nameList> name_list var_para_list
 %type<a_field> field_decl
 %type<a_varDecList> var_decl
 %type<a_dec> function_decl procedure_decl
 %type<a_routine_part_head> function_head procedure_head
 %type<a_paraList> parameters para_decl_list
 %type<a_paraField> para_type_list
-%type<a_stmt> stmt non_label_stmt assign_stmt proc_stmt compound_stmt if_stmt repeat_stmt while_stmt for_stmt case_stmt goto_stmt   else_clause
+%type<a_stmt> stmt non_label_stmt assign_stmt proc_stmt compound_stmt if_stmt repeat_stmt while_stmt for_stmt case_stmt goto_stmt
 %type<a_exp> expression expr term factor
 %type<ival> direction 
 %type<a_caseList> case_expr_list
 %type<a_case> case_expr
 %type<a_expList> expression_list args_list
+
+%nonassoc IFX
+%nonassoc ELSE
 
 %start program_stmt
 
@@ -109,7 +111,7 @@ program_stmt: program_head  routine  DOT {
 	$$ = A_Fuction_Program($1, $2);
 }
 ;
-program_head: PROGRAM  ID  SEMI {
+program_head: PROGRAM  NAME  SEMI {
 	$$ = $2;
 }
 ;
@@ -123,7 +125,7 @@ sub_routine: routine_head  routine_body {
 ;
 
 routine_head: label_part  const_part  type_part  var_part  routine_part {
-    $$ = A_Fuction_Routine_head($2, $3, $4, $5);
+    $$ = A_Routine_head($2, $3, $4, $5);
 }
 ;
 label_part: {
@@ -170,10 +172,10 @@ type_part: TYPE type_decl_list {
             $$ = NULL;
             };
 type_decl_list: type_decl_list  type_definition {
-				$$ = A_Fuction_VarDecList($1, $2);
+				$$ = A_Fuction_ExprList($2, $1);
                 }
                 | type_definition {
-				$$ = A_Fuction_VarDecList(NULL, $1);
+				$$ = A_Fuction_ExprList($1, NULL);
                 }
 ;
 type_definition: NAME  EQUAL  type_decl  SEMI {
@@ -201,24 +203,24 @@ simple_type_decl:
     $$ = A_Fuction_SimpleNameListType($2);
     }
     |  const_value  DOTDOT  const_value {
-	$$ = A_Fuction_ConstRange($1,$3);  
+	$$ = A_Fuction_SimpleRangeType(A_Fuction_ConstRange($1,$3));  
     }
     |  MINUS  const_value  DOTDOT  const_value{
     $2->value.integer *= -1;
-    $$ = A_Fuction_ConstRange($2,$4); 
+    $$ = A_Fuction_SimpleRangeType(A_Fuction_ConstRange($2,$4)); 
     }
     |  MINUS  const_value  DOTDOT  MINUS  const_value{
 	$2->value.integer *= -1;
 	$5->value.integer *= -1;
-	$$ = A_Fuction_ConstRange($2,$5); 
+	$$ = A_Fuction_SimpleRangeType(A_Fuction_ConstRange($2,$5)); 
 	}
     |  NAME  DOTDOT  NAME{
-	$$ = A_Fuction_NameRange($1,$3); 
+	$$ = A_Fuction_SimpleRangeType(A_Fuction_NameRange($1,$3)); 
 	}
 ;
 array_type_decl:
     ARRAY  LB  simple_type_decl  RB  OF  type_decl {
-	$$ = A_Fuction_Array($3,$6);
+	    $$ = A_Fuction_Array($3->value.range,$6);
     }
 ;
 record_type_decl:
@@ -238,10 +240,10 @@ field_decl:
     }
 ;
 name_list:
-    name_list  COMMA  ID {
+    name_list  COMMA  NAME {
 	$$ = A_Fuction_NameList(A_Fuction_Name($3), $1);
     }
-    | ID {
+    | NAME {
 	$$ = A_Fuction_NameList(A_Fuction_Name($1), NULL);        
     };
 var_part: VAR  var_decl_list {
@@ -253,40 +255,35 @@ var_part: VAR  var_decl_list {
 ;
 var_decl_list :
     var_decl_list  var_decl {
-	$$ = A_Fuction_ExprList($2,$1);
+	$$ = A_Fuction_ExprList(A_Fuction_VarDec($2),$1);
     }
     | var_decl {
-	$$ = A_Fuction_ExprList($1,NULL);
+	$$ = A_Fuction_ExprList(A_Fuction_VarDec($1),NULL);
     };
 var_decl:
     name_list  COLON  type_decl  SEMI {
 	$$ = A_Fuction_VarDecList($1,$3);
     };
-/*routine_part: /* empty 
-            | routine_decl_list
-;
-routine_decl_list: function_decl
-            | procedure_decl
-            | function_decl routine_decl_list
-            | procedure_decl routine_decl_list
-; */
-routine_part
-	: routine_part function_decl					{$$ = A_Fuction_ExprList($2, $1);}
-	| routine_part procedure_decl					{$$ = A_Fuction_ExprList($2, $1);}
-	| function_decl									{$$ = A_Fuction_ExprList($1, NULL);}
-	| procedure_decl								{$$ = A_Fuction_ExprList($1, NULL);}
-	|												{$$ = NULL;}
+routine_part:
+	/*empty*/			{$$ = NULL;}
+    | routine_decl_list {$$ = $1;}
+routine_decl_list: 
+      function_decl {$$ = A_Fuction_ExprList($1, NULL);}
+    | procedure_decl {$$ = A_Fuction_ExprList($1, NULL);}
+    | function_decl routine_decl_list {$$ = A_Fuction_ExprList($1, $2);}
+    | procedure_decl routine_decl_list {$$ = A_Fuction_ExprList($1, $2);}
+;  
 function_decl :
     function_head  SEMI  sub_routine  SEMI {
-	$$ = A_Fuction_RoutinePart($1, $3);
+	    $$ = A_Fuction_RoutinePartDec(A_Fuction_RoutinePart($1, $3))    ;
     };
 function_head :
     FUNCTION  NAME  parameters  COLON  simple_type_decl {
-	$$ = A_Fuction_FuncHead($2, $3, $5);
+	    $$ = A_Fuction_FuncHead($2, $3, $5);
     };
 procedure_decl :
     procedure_head  SEMI  sub_routine  SEMI {
-	$$ = A_Fuction_RoutinePart($1, $3);
+	    $$ = A_Fuction_RoutinePartDec(A_Fuction_RoutinePart($1, $3));
     };
 procedure_head :
     PROCEDURE NAME parameters {
@@ -317,8 +314,9 @@ var_para_list:
     | name_list {
 	$$ = $1;
     }; 
+
 routine_body: compound_stmt {
-			$$ = $1->value.compoundStmt;
+			    $$ = $1->value.compoundStmt->substmtList;
             }
 ;
 compound_stmt: BEGIN_TOKEN  stmt_list  END {
@@ -365,20 +363,20 @@ non_label_stmt:
     | goto_stmt {
 	$$ = $1;
     };
-assign_stmt: ID  ASSIGN  expression {
+assign_stmt: NAME  ASSIGN  expression {
 			$$ = A_Fuction_AssignStatement(A_Fuction_Var($1), $3);
             }
-           | ID LB expression RB ASSIGN expression {
+           | NAME LB expression RB ASSIGN expression {
  			$$ = A_Fuction_AssignStatement(A_Fuction_ArrayElement($1, $3), $6);
             }
-           | ID  DOT  ID  ASSIGN  expression {
+           | NAME  DOT  NAME  ASSIGN  expression {
 		   $$ = A_Fuction_AssignStatement(A_Fuction_RecordField($1, $3), $5);	
            }
 ;
-proc_stmt:     ID {
+proc_stmt:     NAME {
 			$$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, NULL));
             }
-              |  ID  LP  args_list  RP {
+              |  NAME  LP  args_list  RP {
 			$$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, $3));
             }
              |  SYS_PROC { 
@@ -390,7 +388,7 @@ proc_stmt:     ID {
 			
             }
 ; /* ? */
-if_stmt: IF  expression  THEN  stmt{
+if_stmt: IF  expression  THEN  stmt %prec IFX{
 		$$ = A_Fuction_IfStatement($2, $4, NULL);
         } 
         | IF  expression THEN  stmt ELSE stmt{
@@ -403,7 +401,7 @@ repeat_stmt: REPEAT  stmt_list  UNTIL  expression {
 while_stmt: WHILE  expression  DO stmt {
 			$$ = A_Fuction_WhileStatement($2, $4);
             };
-for_stmt:     FOR  ID  ASSIGN  expression  direction  expression  DO stmt {
+for_stmt:     FOR  NAME  ASSIGN  expression  direction  expression  DO stmt {
       		$$ = A_Fuction_ForStatement(A_Fuction_Var($2), $4, $5, $6, $8);
             };
 direction:     TO {
@@ -426,7 +424,7 @@ case_expr_list: case_expr_list  case_expr {
 case_expr:     const_value  COLON  stmt  SEMI {
 			$$ = A_Fuction_Case($1, NULL, $3);
             }
-              |  ID  COLON  stmt  SEMI {
+              |  NAME  COLON  stmt  SEMI {
 			  $$ = A_Fuction_Case(NULL, $1, $3);
               }
 ;
@@ -536,10 +534,10 @@ factor: NAME {
     |  MINUS  factor {
 	$$ = A_Fuction_OpExp(A_negOp, NULL, $2);
     }
-    |  ID  LB  expression  RB {
+    |  NAME  LB  expression  RB {
 	$$ = A_Fuction_VarExp(A_Fuction_ArrayElement($1, $3));
     }
-    |  ID  DOT  ID {
+    |  NAME  DOT  NAME {
 	$$ = A_Fuction_VarExp(A_Fuction_RecordField($1, $3));
     }
 ;
@@ -551,13 +549,7 @@ args_list:     args_list  COMMA  expression {
             }
 ;
 
-ID :    NAME { $$ = $1; }
-        | SYS_CON { }
-        | SYS_FUNCT { }
-        | SYS_PROC { }
-        | SYS_TYPE { }
-;
-/* ? */
+
 %%
 extern int cur_line_num;
 void yyerror(char *s)

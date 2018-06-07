@@ -7,7 +7,7 @@ PARSER = spl.y
 build: $(OUT)
 
 run: $(OUT)
-	./$(OUT) < text_example/test2.spl > test.asm
+	./$(OUT) < text_example/test1.spl > test.asm
 
 clean:
 	rm -f *.o *.asm y.output y.tab.* $(OUT)

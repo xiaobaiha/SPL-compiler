@@ -393,7 +393,7 @@ struct A_expList_
 A_pro A_Fuction_Program(table_t name, A_routine routine);
 A_routine A_Fuction_Routine(A_routine_head head, A_stmtList compoundStmt);
 A_routine_head A_Routine_head(A_decList constPart, A_decList typePart, A_decList varPart, A_decList routinePart);
-A_decList A_Fuction_DecList(A_dec head, A_decList next);
+A_decList A_Fuction_ExprList(A_dec head, A_decList next);
 A_dec A_Fuction_ConstDec(table_t name, A_const value);
 A_const A_Fuction_Integer(int i);
 A_const A_Fuction_Real(double r);

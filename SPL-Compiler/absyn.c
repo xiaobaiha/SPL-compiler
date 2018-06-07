@@ -26,7 +26,7 @@ A_routine A_Fuction_Routine(A_routine_head head, A_stmtList compoundStmt)
 	return p;
 }
 
-A_routine_head A_Fuction_Routine_head(A_decList constPart, A_decList typePart, A_decList varPart, A_decList routinePart)
+A_routine_head A_Routine_head(A_decList constPart, A_decList typePart, A_decList varPart, A_decList routinePart)
 {
 	A_routine_head p = (A_routine_head)checked_malloc(sizeof(*p));
 	p->constPart = constPart;
