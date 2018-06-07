@@ -140,10 +140,10 @@ const_part: CONST const_expr_list {
     }
 ;
 const_expr_list: const_expr_list  NAME  EQUAL  const_value  SEMI {
-		$$ = A_Fuction_ExprList(A_Fuction_ConstDec($2,$4),$1);            
+		    $$ = A_Fuction_ExprList(A_Fuction_ConstDec($2,$4),$1);            
         }
         |  NAME  EQUAL  const_value  SEMI {
-		$$ = A_Fuction_ExprList(A_Fuction_ConstDec($1,$3),NULL);
+		    $$ = A_Fuction_ExprList(A_Fuction_ConstDec($1,$3),NULL);
         }
 ;
 const_value: INTEGER {
@@ -320,12 +320,14 @@ routine_body: compound_stmt {
             }
 ;
 compound_stmt: BEGIN_TOKEN  stmt_list  END {
-				$$ = A_Fuction_CompoundStatement($2);
+                    printf("compound_stmt\n");
+				    $$ = A_Fuction_CompoundStatement($2);
                 }
 ;
 stmt_list:
     stmt_list  stmt  SEMI {
-	$$ = A_Fuction_StatementList($2, $1);
+        printf("stmt_list\n");
+	    $$ = A_Fuction_StatementList($2, $1);
     }
     |{$$ = NULL;};
 stmt:
@@ -364,30 +366,37 @@ non_label_stmt:
 	$$ = $1;
     };
 assign_stmt: NAME  ASSIGN  expression {
-			$$ = A_Fuction_AssignStatement(A_Fuction_Var($1), $3);
+			    $$ = A_Fuction_AssignStatement(A_Fuction_Var($1), $3);
             }
            | NAME LB expression RB ASSIGN expression {
- 			$$ = A_Fuction_AssignStatement(A_Fuction_ArrayElement($1, $3), $6);
+ 			    $$ = A_Fuction_AssignStatement(A_Fuction_ArrayElement($1, $3), $6);
             }
            | NAME  DOT  NAME  ASSIGN  expression {
-		   $$ = A_Fuction_AssignStatement(A_Fuction_RecordField($1, $3), $5);	
+		        $$ = A_Fuction_AssignStatement(A_Fuction_RecordField($1, $3), $5);	
            }
 ;
-proc_stmt:     NAME {
-			$$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, NULL));
+proc_stmt:  NAME {
+			    $$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, NULL));
             }
               |  NAME  LP  args_list  RP {
-			$$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, $3));
+			    $$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, $3));
             }
-             |  SYS_PROC { 
-            }
-              |  SYS_PROC  LP  expression_list  RP {
-
-            }
-              |  READ  LP  factor  RP {
-			
-            }
-; /* ? */
+              | SYS_PROC { 
+                    switch($1){
+                        case SYS_PROC_WRITE: $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("write", NULL), NULL)); break;
+                        case SYS_PROC_WRITELN: $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("writeln", NULL), NULL)); break;
+                    }
+                }
+              | SYS_PROC  LP  expression_list  RP {
+                    switch($1){
+                        case SYS_PROC_WRITE: $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("write", NULL), $3)); break;
+                        case SYS_PROC_WRITELN: $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("read", NULL), $3)); break;
+                    }
+                }
+              | READ  LP  factor  RP {
+                    $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("read", NULL), A_Fuction_ExpList($3, NULL)));
+                }
+;
 if_stmt: IF  expression  THEN  stmt %prec IFX{
 		$$ = A_Fuction_IfStatement($2, $4, NULL);
         } 

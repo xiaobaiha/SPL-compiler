@@ -13,6 +13,7 @@ var
 	j : ar;
 	str : string;
 
+
 function add(a, b : integer) : integer;
 
 begin
