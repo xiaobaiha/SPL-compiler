@@ -16,9 +16,9 @@ SymbolTable* symbolTable;
 table_t makeSymbol(char* name, void* val)
 {
 	table_t s;
-	s = checked_malloc(sizeof(*s));
-	s->name = name;
-	s->value = val;
+	s = (table_t)checked_malloc(sizeof(*s));
+    s->name = name;
+    s->value = val;
 	return s;
 }
 

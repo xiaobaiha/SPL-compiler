@@ -1,6 +1,6 @@
 CC = gcc
 OUT = tcc
-OBJ = lex.yy.o y.tab.o util.o error.o symbol.o types.o absyn.o
+OBJ = unittest.o lex.yy.o y.tab.o util.o error.o symbol.o types.o absyn.o
 SCANNER = spl.l
 PARSER = spl.y
 
@@ -10,10 +10,13 @@ run: $(OUT)
 	./$(OUT) < text_example/test1.spl > test.asm
 
 clean:
-	rm -f *.o *.asm y.output y.tab.* $(OUT)
+	rm -f *.o *.asm y.output $(OUT)
 
 $(OUT): $(OBJ)
 	$(CC) -o $(OUT) $(OBJ)
+
+unittest.o: unittest.c absyn.h y.tab.c symbol.h
+	$(CC) -g -c unittest.c
 
 y.tab.o: y.tab.c
 	$(CC) -g -c y.tab.c

@@ -9,6 +9,8 @@
 extern FILE *yyin;
 int yylex(void);
 void yyerror(char *s);
+
+A_pro root = NULL;
 %}
 
 %union {
@@ -69,7 +71,7 @@ void yyerror(char *s);
 %token<fval> REAL
 %token<cval> CHAR 
 %token<sval> STRING
-%token<s_symbol> NAME
+%token<sval> NAME
 
 %token<sys_con> SYS_CON
 %token<sys_funct> SYS_FUNCT
@@ -108,11 +110,11 @@ void yyerror(char *s);
 
 %%
 program_stmt: program_head  routine  DOT {
-	$$ = A_Fuction_Program($1, $2);
+	root = A_Fuction_Program($1, $2);
 }
 ;
 program_head: PROGRAM  NAME  SEMI {
-	$$ = $2;
+	$$ = makeSymbol($2, NULL);
 }
 ;
 routine: routine_head  routine_body {
@@ -140,10 +142,10 @@ const_part: CONST const_expr_list {
     }
 ;
 const_expr_list: const_expr_list  NAME  EQUAL  const_value  SEMI {
-		    $$ = A_Fuction_ExprList(A_Fuction_ConstDec($2,$4),$1);            
+		    $$ = A_Fuction_ExprList(A_Fuction_ConstDec(makeSymbol($2, NULL),$4),$1);            
         }
         |  NAME  EQUAL  const_value  SEMI {
-		    $$ = A_Fuction_ExprList(A_Fuction_ConstDec($1,$3),NULL);
+		    $$ = A_Fuction_ExprList(A_Fuction_ConstDec(makeSymbol($1, NULL),$3),NULL);
         }
 ;
 const_value: INTEGER {
@@ -179,7 +181,7 @@ type_decl_list: type_decl_list  type_definition {
                 }
 ;
 type_definition: NAME  EQUAL  type_decl  SEMI {
-				$$ = A_Fuction_TypeDec($1,$3);
+				$$ = A_Fuction_TypeDec(makeSymbol($1, NULL),$3);
                 }
 ;   
 type_decl:
@@ -197,7 +199,7 @@ simple_type_decl:
     $$ = A_Fuction_SimpleSysType($1); 
     }
     |  NAME {
-    $$ = A_Fuction_SimpleNameType($1);
+    $$ = A_Fuction_SimpleNameType(makeSymbol($1, NULL));
     }
     |  LP  name_list  RP{
     $$ = A_Fuction_SimpleNameListType($2);
@@ -215,7 +217,7 @@ simple_type_decl:
 	$$ = A_Fuction_SimpleRangeType(A_Fuction_ConstRange($2,$5)); 
 	}
     |  NAME  DOTDOT  NAME{
-	$$ = A_Fuction_SimpleRangeType(A_Fuction_NameRange($1,$3)); 
+	$$ = A_Fuction_SimpleRangeType(A_Fuction_NameRange(makeSymbol($1, NULL),makeSymbol($3, NULL))); 
 	}
 ;
 array_type_decl:
@@ -241,10 +243,10 @@ field_decl:
 ;
 name_list:
     name_list  COMMA  NAME {
-	$$ = A_Fuction_NameList(A_Fuction_Name($3), $1);
+	$$ = A_Fuction_NameList(A_Fuction_Name(makeSymbol($3, NULL)), $1);
     }
     | NAME {
-	$$ = A_Fuction_NameList(A_Fuction_Name($1), NULL);        
+	$$ = A_Fuction_NameList(A_Fuction_Name(makeSymbol($1, NULL)), NULL);        
     };
 var_part: VAR  var_decl_list {
 	$$ = $2;
@@ -279,7 +281,7 @@ function_decl :
     };
 function_head :
     FUNCTION  NAME  parameters  COLON  simple_type_decl {
-	    $$ = A_Fuction_FuncHead($2, $3, $5);
+	    $$ = A_Fuction_FuncHead(makeSymbol($2, NULL), $3, $5);
     };
 procedure_decl :
     procedure_head  SEMI  sub_routine  SEMI {
@@ -287,7 +289,7 @@ procedure_decl :
     };
 procedure_head :
     PROCEDURE NAME parameters {
-	$$ = A_Fuction_ProcHead($2, $3);
+	$$ = A_Fuction_ProcHead(makeSymbol($2, NULL), $3);
     };
 parameters:
     LP  para_decl_list  RP {
@@ -366,21 +368,20 @@ non_label_stmt:
 	$$ = $1;
     };
 assign_stmt: NAME  ASSIGN  expression {
-                printf("xtf0\n");
-			    $$ = A_Fuction_AssignStatement(A_Fuction_Var($1), $3);
+			    $$ = A_Fuction_AssignStatement(A_Fuction_Var(makeSymbol($1, NULL)), $3);
             }
            | NAME LB expression RB ASSIGN expression {
- 			    $$ = A_Fuction_AssignStatement(A_Fuction_ArrayElement($1, $3), $6);
+ 			    $$ = A_Fuction_AssignStatement(A_Fuction_ArrayElement(makeSymbol($1, NULL), $3), $6);
             }
            | NAME  DOT  NAME  ASSIGN  expression {
-		        $$ = A_Fuction_AssignStatement(A_Fuction_RecordField($1, $3), $5);	
+		        $$ = A_Fuction_AssignStatement(A_Fuction_RecordField(makeSymbol($1, NULL), makeSymbol($3, NULL)), $5);	
            }
 ;
 proc_stmt:  NAME {
-			    $$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, NULL));
+			    $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol($1, NULL), NULL));
             }
               |  NAME  LP  args_list  RP {
-			    $$ = A_Fuction_ProcStatement(A_Fuction_Proc($1, $3));
+			    $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol($1, NULL), $3));
             }
               | SYS_PROC { 
                     switch($1){
@@ -412,7 +413,7 @@ while_stmt: WHILE  expression  DO stmt {
 			$$ = A_Fuction_WhileStatement($2, $4);
             };
 for_stmt:     FOR  NAME  ASSIGN  expression  direction  expression  DO stmt {
-      		$$ = A_Fuction_ForStatement(A_Fuction_Var($2), $4, $5, $6, $8);
+      		$$ = A_Fuction_ForStatement(A_Fuction_Var(makeSymbol($2, NULL)), $4, $5, $6, $8);
             };
 direction:     TO {
 			$$ = 1;
@@ -435,7 +436,7 @@ case_expr:     const_value  COLON  stmt  SEMI {
 			$$ = A_Fuction_Case($1, NULL, $3);
             }
               |  NAME  COLON  stmt  SEMI {
-			  $$ = A_Fuction_Case(NULL, $1, $3);
+			  $$ = A_Fuction_Case(NULL, makeSymbol($1, NULL), $3);
               }
 ;
 goto_stmt: GOTO  INTEGER {
@@ -502,10 +503,10 @@ term: term  MUL  factor {
     }
 ;
 factor: NAME {
-	$$ = A_Fuction_NameExp($1);
+	$$ = A_Fuction_NameExp(makeSymbol($1, NULL));
     }
     |  NAME  LP  args_list  RP {
-	$$ = A_Fuction_FuncExp(A_Fuction_Proc($1, $3));
+	$$ = A_Fuction_FuncExp(A_Fuction_Proc(makeSymbol($1, NULL), $3));
     }
     |  SYS_FUNCT {
 	    switch($1){
@@ -545,10 +546,10 @@ factor: NAME {
 	$$ = A_Fuction_OpExp(A_negOp, NULL, $2);
     }
     |  NAME  LB  expression  RB {
-	$$ = A_Fuction_VarExp(A_Fuction_ArrayElement($1, $3));
+	$$ = A_Fuction_VarExp(A_Fuction_ArrayElement(makeSymbol($1, NULL), $3));
     }
     |  NAME  DOT  NAME {
-	$$ = A_Fuction_VarExp(A_Fuction_RecordField($1, $3));
+	$$ = A_Fuction_VarExp(A_Fuction_RecordField(makeSymbol($1, NULL), makeSymbol($3, NULL)));
     }
 ;
 args_list:     args_list  COMMA  expression {
@@ -568,9 +569,10 @@ void yyerror(char *s)
 	exit(-1);
 }
 
+/*
 int main(int argc, char *argv[])
 {
-    ++argv, --argc;    /* skip argv[0] */
+    ++argv, --argc;  
     if (argc > 0) {
         yyin = fopen(argv[0], "r");
     } else {
@@ -580,3 +582,4 @@ int main(int argc, char *argv[])
     yyparse();
     return 0;
 };
+*/

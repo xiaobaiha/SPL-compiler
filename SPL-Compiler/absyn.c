@@ -13,6 +13,8 @@
 A_pro A_Fuction_Program(table_t name, A_routine routine)
 {
 	A_pro p = (A_pro)checked_malloc(sizeof(*p));
+	//p->name = (table_t)checked_malloc(sizeof(*(p->name)));
+	
 	p->name = name;
 	p->routine = routine;
 	return p;

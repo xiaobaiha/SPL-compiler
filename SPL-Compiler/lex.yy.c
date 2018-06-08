@@ -627,13 +627,16 @@ void lex_error(char* msg, int line);
 void NewLine();
 void adjust(char* text);
 
-int install_str(); 
+int construct_str();
+int construct_name();
+int construct_int();
+int construct_real();
 
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno; \
     yylloc.first_column = yycolumn; yylloc.last_column = yycolumn + yyleng - 1; \
     yycolumn += yyleng; \
 
-#line 637 "lex.yy.c"
+#line 640 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -851,9 +854,9 @@ YY_DECL
 		}
 
 	{
-#line 95 "spl.l"
+#line 98 "spl.l"
 
-#line 857 "lex.yy.c"
+#line 860 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -923,311 +926,311 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 96 "spl.l"
+#line 99 "spl.l"
 { adjust(yytext); lex_newline(); cur_line_num++;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 97 "spl.l"
+#line 100 "spl.l"
 {/* do nothing*/}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 98 "spl.l"
+#line 101 "spl.l"
 { adjust(yytext);/* ignore comments */}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 100 "spl.l"
+#line 103 "spl.l"
 { adjust(yytext);return LP;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 101 "spl.l"
+#line 104 "spl.l"
 { adjust(yytext);return RP;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 102 "spl.l"
+#line 105 "spl.l"
 { adjust(yytext);return LB;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 103 "spl.l"
+#line 106 "spl.l"
 { adjust(yytext);return RB;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 104 "spl.l"
+#line 107 "spl.l"
 { adjust(yytext);return DOT;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 105 "spl.l"
+#line 108 "spl.l"
 { adjust(yytext);return COMMA;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 106 "spl.l"
+#line 109 "spl.l"
 { adjust(yytext);return COLON;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 107 "spl.l"
+#line 110 "spl.l"
 { adjust(yytext);return MUL;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 108 "spl.l"
+#line 111 "spl.l"
 { adjust(yytext);return DIV;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 109 "spl.l"
+#line 112 "spl.l"
 { adjust(yytext);return UNEQUAL;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 110 "spl.l"
+#line 113 "spl.l"
 { adjust(yytext);return READ;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 111 "spl.l"
+#line 114 "spl.l"
 { adjust(yytext);return NOT;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 112 "spl.l"
+#line 115 "spl.l"
 { adjust(yytext);return PLUS;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 113 "spl.l"
+#line 116 "spl.l"
 { adjust(yytext);return MINUS;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 114 "spl.l"
+#line 117 "spl.l"
 { adjust(yytext);return GE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 115 "spl.l"
+#line 118 "spl.l"
 { adjust(yytext);return GT;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 116 "spl.l"
+#line 119 "spl.l"
 { adjust(yytext);return LE;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 117 "spl.l"
+#line 120 "spl.l"
 { adjust(yytext);return LT;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 118 "spl.l"
+#line 121 "spl.l"
 { adjust(yytext);return EQUAL;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 119 "spl.l"
+#line 122 "spl.l"
 { adjust(yytext);return ASSIGN;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 120 "spl.l"
+#line 123 "spl.l"
 { adjust(yytext);return MOD;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 121 "spl.l"
+#line 124 "spl.l"
 { adjust(yytext);return DOTDOT;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 122 "spl.l"
+#line 125 "spl.l"
 { adjust(yytext);return SEMI;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 123 "spl.l"
+#line 126 "spl.l"
 { adjust(yytext);return AND;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 124 "spl.l"
+#line 127 "spl.l"
 { adjust(yytext);return ARRAY;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 125 "spl.l"
+#line 128 "spl.l"
 { adjust(yytext);return BEGIN_TOKEN;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 126 "spl.l"
+#line 129 "spl.l"
 { adjust(yytext);return CASE;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 127 "spl.l"
+#line 130 "spl.l"
 { adjust(yytext);return CONST;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 128 "spl.l"
+#line 131 "spl.l"
 { adjust(yytext);return DO;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 129 "spl.l"
+#line 132 "spl.l"
 { adjust(yytext);return DOWNTO;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 130 "spl.l"
+#line 133 "spl.l"
 { adjust(yytext);return ELSE;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 131 "spl.l"
+#line 134 "spl.l"
 { adjust(yytext);return END;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 132 "spl.l"
+#line 135 "spl.l"
 { adjust(yytext);return FOR;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 133 "spl.l"
+#line 136 "spl.l"
 { adjust(yytext);return FUNCTION;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 134 "spl.l"
+#line 137 "spl.l"
 { adjust(yytext);return GOTO;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 135 "spl.l"
+#line 138 "spl.l"
 { adjust(yytext);return IF;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 136 "spl.l"
+#line 139 "spl.l"
 { adjust(yytext);return OF;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 137 "spl.l"
+#line 140 "spl.l"
 { adjust(yytext);return OR;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 138 "spl.l"
+#line 141 "spl.l"
 { adjust(yytext);return PROCEDURE;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 139 "spl.l"
+#line 142 "spl.l"
 { adjust(yytext);return PROGRAM;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 140 "spl.l"
+#line 143 "spl.l"
 { adjust(yytext);return RECORD;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 141 "spl.l"
+#line 144 "spl.l"
 { adjust(yytext);return REPEAT;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 142 "spl.l"
+#line 145 "spl.l"
 { adjust(yytext);return THEN;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 143 "spl.l"
+#line 146 "spl.l"
 { adjust(yytext);return TO;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 144 "spl.l"
+#line 147 "spl.l"
 { adjust(yytext);return TYPE;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 145 "spl.l"
+#line 148 "spl.l"
 { adjust(yytext);return UNTIL;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 146 "spl.l"
+#line 149 "spl.l"
 { adjust(yytext);return VAR;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 147 "spl.l"
+#line 150 "spl.l"
 { adjust(yytext);return WHILE;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 149 "spl.l"
+#line 152 "spl.l"
 { adjust(yytext);return SYS_CON;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 150 "spl.l"
+#line 153 "spl.l"
 { adjust(yytext);return SYS_FUNCT;}   
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 151 "spl.l"
+#line 154 "spl.l"
 { adjust(yytext);return SYS_PROC;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 152 "spl.l"
+#line 155 "spl.l"
 { adjust(yytext);return SYS_TYPE;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 154 "spl.l"
-{ adjust(yytext);return NAME;}
+#line 157 "spl.l"
+{ adjust(yytext);return construct_name();}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 155 "spl.l"
-{ adjust(yytext);return install_str();}
+#line 158 "spl.l"
+{ adjust(yytext);return construct_str();}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 156 "spl.l"
-{ adjust(yytext);return INTEGER;}
+#line 159 "spl.l"
+{ adjust(yytext);return construct_int();}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 157 "spl.l"
-{ adjust(yytext);return REAL;}
+#line 160 "spl.l"
+{ adjust(yytext);return construct_real();}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 159 "spl.l"
+#line 162 "spl.l"
 { adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 161 "spl.l"
+#line 164 "spl.l"
 ECHO;
 	YY_BREAK
-#line 1231 "lex.yy.c"
+#line 1234 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2240,18 +2243,56 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 161 "spl.l"
+#line 164 "spl.l"
 
 
 
 int yywrap(void){charPos=1;return 1;} 
 
-int install_str(){
+int construct_int()
+{
+	int num;
+	sscanf(yytext, "%d", &num);
+	yylval.ival = num;
+	return INTEGER;
+}
+
+int construct_real()
+{
+	float num;
+	sscanf(yytext, "%f", &num);
+	yylval.fval = num;
+	return REAL;
+}
+
+int construct_name()
+{
+	
+	yylval.sval = checked_malloc(yyleng+1);
+	strcpy(yylval.sval, yytext);
+	return NAME;
+	/*
+	int len = yyleng;
+	if (len > MAXNAMELEN) {
+		len = MAXNAMELEN;
+	}
+
+	for (int i = 0; i < len; i++) {
+		yylval.sval[i] = yytext[i];
+	}
+
+	yylval.sval[len] = '\0';
+
+	return NAME;
+	*/
+}
+
+int construct_str(){
 	
 	int len = 0;
 	char c;
 	while ((c = input()) != '\'') {
-		/*if (len < 15) yylval->stringval[len] = c;*/
+		/*if (len < 15) yylval.sval[len] = c;*/
 		len++;
 	}
 	if (len > 15) len = 15;

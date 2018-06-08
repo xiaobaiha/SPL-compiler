@@ -20,7 +20,10 @@ void lex_error(char* msg, int line);
 void NewLine();
 void adjust(char* text);
 
-int install_str(); 
+int construct_str();
+int construct_name();
+int construct_int();
+int construct_real();
 
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno; \
     yylloc.first_column = yycolumn; yylloc.last_column = yycolumn + yyleng - 1; \
@@ -151,10 +154,10 @@ name    [a-zA-Z][_a-zA-Z0-9]*
 {sys_proc}  { adjust(yytext);return SYS_PROC;}
 {sys_type}  { adjust(yytext);return SYS_TYPE;}
 
-{name}  { adjust(yytext);return NAME;}
-{string}	{ adjust(yytext);return install_str();}
-{integer}   { adjust(yytext);return INTEGER;}
-{real}  { adjust(yytext);return REAL;}
+{name}  { adjust(yytext);return construct_name();}
+{string}	{ adjust(yytext);return construct_str();}
+{integer}   { adjust(yytext);return construct_int();}
+{real}  { adjust(yytext);return construct_real();}
 
 .   { adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");}
 
@@ -162,12 +165,50 @@ name    [a-zA-Z][_a-zA-Z0-9]*
 
 int yywrap(void){charPos=1;return 1;} 
 
-int install_str(){
+int construct_int()
+{
+	int num;
+	sscanf(yytext, "%d", &num);
+	yylval.ival = num;
+	return INTEGER;
+}
+
+int construct_real()
+{
+	float num;
+	sscanf(yytext, "%f", &num);
+	yylval.fval = num;
+	return REAL;
+}
+
+int construct_name()
+{
+	
+	yylval.sval = checked_malloc(yyleng+1);
+	strcpy(yylval.sval, yytext);
+	return NAME;
+	/*
+	int len = yyleng;
+	if (len > MAXNAMELEN) {
+		len = MAXNAMELEN;
+	}
+
+	for (int i = 0; i < len; i++) {
+		yylval.sval[i] = yytext[i];
+	}
+
+	yylval.sval[len] = '\0';
+
+	return NAME;
+	*/
+}
+
+int construct_str(){
 	
 	int len = 0;
 	char c;
 	while ((c = input()) != '\'') {
-		/*if (len < 15) yylval->stringval[len] = c;*/
+		/*if (len < 15) yylval.sval[len] = c;*/
 		len++;
 	}
 	if (len > 15) len = 15;

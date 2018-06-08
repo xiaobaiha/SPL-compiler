@@ -15,6 +15,8 @@ typedef char *Bool;
 #define TRUE 1
 #define FALSE 0
 
+#define MAXNAMELEN 15
+
 void *checked_malloc(int);
 string String(char *);
 //void adjust(string text);
