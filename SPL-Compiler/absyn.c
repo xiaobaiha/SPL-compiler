@@ -334,17 +334,12 @@ A_stmt A_Fuction_LabelStatement(int label, A_stmt stmt)
 
 A_stmt A_Fuction_AssignStatement(A_var var, A_exp exp)
 {
-	//printf("xtf1\n");
 	A_stmt p = (A_stmt)checked_malloc(sizeof(*p));
 	p->kind = A_assignStmt;
 	p->label = -1;
 	p->value.assignStmt = (A_assign)checked_malloc(sizeof(*(p->value.assignStmt)));
-	//printf("xtf3, %ld\n", sizeof(p->value.assignStmt->exp));
-	//printf("xtf3.1\n");
-	p->value.assignStmt->exp = NULL;
-	//printf("xtf4\n");
+	p->value.assignStmt->exp = exp;
 	p->value.assignStmt->var = var;
-	//printf("xtf2\n");
 	return p;
 }
 
