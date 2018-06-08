@@ -1,6 +1,6 @@
 CC = gcc
-OUT = tcc
-OBJ = unittest.o lex.yy.o y.tab.o util.o error.o symbol.o types.o absyn.o
+OUT = main
+OBJ = main.o lex.yy.o y.tab.o util.o error.o symbol.o types.o absyn.o
 SCANNER = spl.l
 PARSER = spl.y
 
@@ -14,6 +14,9 @@ clean:
 
 $(OUT): $(OBJ)
 	$(CC) -o $(OUT) $(OBJ)
+
+main.o: main.c absyn.h y.tab.c symbol.h
+	$(CC) -g -c main.c
 
 unittest.o: unittest.c absyn.h y.tab.c symbol.h
 	$(CC) -g -c unittest.c

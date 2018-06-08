@@ -328,7 +328,6 @@ compound_stmt: BEGIN_TOKEN  stmt_list  END {
 ;
 stmt_list:
     stmt_list  stmt  SEMI {
-        printf("stmt_list\n");
 	    $$ = A_Fuction_StatementList($2, $1);
     }
     |{$$ = NULL;};

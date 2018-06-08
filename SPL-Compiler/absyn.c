@@ -14,7 +14,7 @@ A_pro A_Fuction_Program(table_t name, A_routine routine)
 {
 	A_pro p = (A_pro)checked_malloc(sizeof(*p));
 	//p->name = (table_t)checked_malloc(sizeof(*(p->name)));
-	
+
 	p->name = name;
 	p->routine = routine;
 	return p;
@@ -38,12 +38,21 @@ A_routine_head A_Routine_head(A_decList constPart, A_decList typePart, A_decList
 	return p;
 }
 
-A_decList A_Fuction_ExprList(A_dec head, A_decList next)
+A_decList A_Fuction_ExprList(A_dec node, A_decList aList)
 {
 	A_decList p = (A_decList)checked_malloc(sizeof(*p));
-	p->head = head;
-	p->next = next;
-	return p;
+	p->head = node;
+	p->next = NULL;
+	A_decList tempHead = aList;
+	if (!tempHead){
+		aList = p;
+	}
+	else {
+		while(tempHead->next) 
+			tempHead = tempHead->next;
+		tempHead->next = p;
+	}
+	return aList;
 }
 
 A_dec A_Fuction_ConstDec(table_t name, A_const value)
@@ -83,7 +92,7 @@ A_dec A_Fuction_RoutinePartDec(A_routine_part routine)
 A_const A_Fuction_Integer(int i)
 {
 	A_const p = (A_const)checked_malloc(sizeof(*p));
-  p->kind = TY_INTEGER;
+  	p->kind = TY_INTEGER;
 	p->value.integer = i;
 	return p;
 }
@@ -194,12 +203,24 @@ A_range A_Fuction_NameRange(table_t lo, table_t up)
 	return p;
 }
 
-A_nameList A_Fuction_NameList(A_name head, A_nameList next)
+A_nameList A_Fuction_NameList(A_name node, A_nameList aList)
 {
 	A_nameList p = (A_nameList)checked_malloc(sizeof(*p));
-	p->head=head;
-	p->next=next;
-	return p;
+	//p->head=node;
+	//p->next=aList;
+
+	p->head = node;
+	p->next = NULL;
+	A_nameList tempHead = aList;
+	if (!tempHead){
+		aList = p;
+	}
+	else {
+		while(tempHead->next) 
+			tempHead = tempHead->next;
+		tempHead->next = p;
+	}
+	return aList;
 }
 
 A_name A_Fuction_Name(table_t name)
@@ -217,12 +238,24 @@ A_array A_Fuction_Array(A_range range, A_type type)
 	return p;
 }
 
-A_fieldList A_Fuction_FieldList(A_field head, A_fieldList next)
+A_fieldList A_Fuction_FieldList(A_field node, A_fieldList aList)
 {
 	A_fieldList p = (A_fieldList)checked_malloc(sizeof(*p));
-	p->head=head;
-	p->next=next;
-	return p;
+	//p->head=head;
+	//p->next=next;
+
+	p->head = node;
+	p->next = NULL;
+	A_fieldList tempHead = aList;
+	if (!tempHead){
+		aList = p;
+	}
+	else {
+		while(tempHead->next) 
+			tempHead = tempHead->next;
+		tempHead->next = p;
+	}
+	return aList;
 }
 
 A_field A_Fuction_Field(A_nameList name_list, A_type type_decl)
@@ -252,8 +285,10 @@ A_routine_part_head A_Fuction_FuncHead(table_t name, A_paraList parameters, A_si
 {
 	A_routine_part_head p = (A_routine_part_head)checked_malloc(sizeof(*p));
 	p->name = name;
+	//p->kind = A_kind_function;
 	p->parameters = parameters;
 	p->simpleType = simpleType;
+	p->kind = A_kind_function;
 	return p;
 }
 
@@ -263,14 +298,27 @@ A_routine_part_head A_Fuction_ProcHead(table_t name, A_paraList parameters)
 	p->name = name;
 	p->parameters = parameters;
 	p->simpleType = NULL;
+	p->kind = A_king_procedure;
 	return p;
 }
 
-A_paraList A_Fuction_ParaList(A_paraField field, A_paraList next){
+A_paraList A_Fuction_ParaList(A_paraField node, A_paraList aList){
 	A_paraList p = (A_paraList)checked_malloc(sizeof(*p));
-	p->field = field;
-	p->next = next;
-	return p;
+	//p->field = field;
+	//p->next = next;
+
+	p->field = node;
+	p->next = NULL;
+	A_paraList tempHead = aList;
+	if (!tempHead){
+		aList = p;
+	}
+	else {
+		while(tempHead->next) 
+			tempHead = tempHead->next;
+		tempHead->next = p;
+	}
+	return aList;
 }
 
 A_paraField A_Fuction_VarParaField(A_nameList nameList, A_simple_type simpleType){
@@ -289,9 +337,9 @@ A_paraField A_Fuction_ValParaField(A_nameList nameList, A_simple_type simpleType
 	return p;
 }
 
-A_var A_Fuction_Var(table_t ID){
+A_var A_Fuction_Var(table_t symbol){
 	A_var p = (A_var)checked_malloc(sizeof(*p));
-	p->ID = ID;
+	p->ID = symbol;
 	p->kind = A_pureID;
 	return p;
 }
@@ -304,10 +352,10 @@ A_var A_Fuction_ArrayElement(table_t ID, A_exp subscript){
 	return p;
 }
 
-A_var A_Fuction_RecordField(table_t ID, table_t fieldID){
+A_var A_Fuction_RecordField(table_t symbol, table_t fieldSymbol){
 	A_var p = (A_var)checked_malloc(sizeof(*p));
-	p->ID = ID;
-	p->value.fieldID = fieldID;
+	p->ID = symbol;
+	p->value.fieldID = fieldSymbol;
 	p->kind = A_recordField;
 	return p;
 }
@@ -320,12 +368,24 @@ A_proc A_Fuction_Proc(table_t function, A_expList args)
 	return p;
 }
 
-A_stmtList A_Fuction_StatementList(A_stmt head, A_stmtList next)
+A_stmtList A_Fuction_StatementList(A_stmt node, A_stmtList aList)
 {
 	A_stmtList p = (A_stmtList)checked_malloc(sizeof(*p));
-	p->head = head;
-	p->next = next;
-	return p;
+	//p->head = head;
+	//p->next = next;
+
+	p->head = node;
+	p->next = NULL;
+	A_stmtList tempHead = aList;
+	if (!tempHead){
+		aList = p;
+	}
+	else {
+		while(tempHead->next) 
+			tempHead = tempHead->next;
+		tempHead->next = p;
+	}
+	return aList;
 }
 
 A_stmt A_Fuction_LabelStatement(int label, A_stmt stmt)
@@ -427,12 +487,22 @@ A_stmt A_Fuction_GotoStatement(int label)
 	return p;
 }
 
-A_caseList A_Fuction_CaseList(A_case head, A_caseList next)
+A_caseList A_Fuction_CaseList(A_case node, A_caseList aList)
 {
 	A_caseList p = (A_caseList)checked_malloc(sizeof(*p));
-	p->head = head;
-	p->next = next;
-	return p;
+
+	p->head = node;
+	p->next = NULL;
+	A_caseList tempHead = aList;
+	if (!tempHead){
+		aList = p;
+	}
+	else {
+		while(tempHead->next) 
+			tempHead = tempHead->next;
+		tempHead->next = p;
+	}
+	return aList;
 }
 
 A_case A_Fuction_Case(A_const constValue, table_t name, A_stmt body)
@@ -444,12 +514,21 @@ A_case A_Fuction_Case(A_const constValue, table_t name, A_stmt body)
 	return p;
 }
 
-A_expList A_Fuction_ExpList(A_exp head, A_expList next)
+A_expList A_Fuction_ExpList(A_exp node, A_expList aList)
 {
 	A_expList p = (A_expList)checked_malloc(sizeof(*p));
-	p->next = next;
-	p->head = head;
-	return p;
+	p->head = node;
+	p->next = NULL;
+	A_expList tempHead = aList;
+	if (!tempHead){
+		aList = p;
+	}
+	else {
+		while(tempHead->next) 
+			tempHead = tempHead->next;
+		tempHead->next = p;
+	}
+	return aList;
 }
 
 A_exp A_Fuction_NameExp(table_t name)

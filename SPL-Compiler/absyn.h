@@ -170,11 +170,12 @@ struct A_const_
 {
   A_sysType kind;
   union {
+    int boolean;
+    char ch;
     int integer;
     double real;
-    char ch;
     char *str;
-    int boolean;
+    
   } value;
 };
 
@@ -249,11 +250,17 @@ struct A_varDecList_
   A_type type_decl;
 };
 
+typedef enum rfind {
+  A_kind_function, 
+  A_king_procedure
+} routinefunckind;
+
 struct A_routine_part_head_
 {
   table_t name;
   A_paraList parameters;
   A_simple_type simpleType;
+  routinefunckind kind;
 };
 
 struct A_routine_part_
@@ -315,10 +322,10 @@ struct A_exp_
   enum
   {
     A_funcExp,
-    A_nameExp,
     A_varExp,
     A_constExp,
-    A_opExp
+    A_opExp,
+    A_nameExp
   } kind;
   A_type valueType;
   union {
