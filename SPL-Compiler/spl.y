@@ -366,6 +366,7 @@ non_label_stmt:
 	$$ = $1;
     };
 assign_stmt: NAME  ASSIGN  expression {
+                printf("xtf0\n");
 			    $$ = A_Fuction_AssignStatement(A_Fuction_Var($1), $3);
             }
            | NAME LB expression RB ASSIGN expression {
