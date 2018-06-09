@@ -13,7 +13,7 @@ int main() {
 	int res;
 	res = yyparse();
 
-	gencode(root, 32, 32);
+	gencode(root, 32, 0);
 	//codeGen(parseresult, blockoffs[blocknumber], labelnumber-1);
 	return 0;
 }

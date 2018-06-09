@@ -620,11 +620,11 @@ static const yytype_uint16 yyrline[] =
      279,   283,   287,   291,   295,   298,   302,   305,   309,   313,
      316,   320,   324,   330,   333,   335,   338,   342,   345,   348,
      351,   354,   357,   360,   363,   366,   369,   372,   375,   379,
-     382,   385,   391,   397,   401,   404,   408,   411,   414,   417,
-     420,   424,   427,   430,   434,   437,   441,   446,   449,   453,
-     456,   459,   462,   465,   468,   471,   475,   478,   481,   484,
-     488,   491,   494,   497,   500,   504,   507,   510,   522,   534,
-     538,   541,   544,   547,   550,   554,   557
+     382,   385,   391,   398,   402,   405,   409,   412,   415,   418,
+     421,   425,   428,   431,   435,   438,   442,   447,   450,   454,
+     457,   460,   463,   466,   469,   472,   476,   479,   482,   485,
+     489,   492,   495,   498,   501,   505,   508,   511,   523,   535,
+     539,   542,   545,   548,   551,   555,   558
 };
 #endif
 
@@ -2320,286 +2320,287 @@ yyreduce:
     {
                     switch((yyvsp[-3].sys_proc)){
                         case SYS_PROC_WRITE: (yyval.a_stmt) = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("write", NULL), (yyvsp[-1].a_expList))); break;
-                        case SYS_PROC_WRITELN: (yyval.a_stmt) = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("read", NULL), (yyvsp[-1].a_expList))); break;
+                        case SYS_PROC_WRITELN: (yyval.a_stmt) = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("writeln", NULL), (yyvsp[-1].a_expList))); break;
+                        
                     }
                 }
-#line 2327 "y.tab.c" /* yacc.c:1646  */
+#line 2328 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 397 "spl.y" /* yacc.c:1646  */
+#line 398 "spl.y" /* yacc.c:1646  */
     {
                     (yyval.a_stmt) = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("read", NULL), A_Fuction_ExpList((yyvsp[-1].a_exp), NULL)));
                 }
-#line 2335 "y.tab.c" /* yacc.c:1646  */
+#line 2336 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 401 "spl.y" /* yacc.c:1646  */
+#line 402 "spl.y" /* yacc.c:1646  */
     {
 		(yyval.a_stmt) = A_Fuction_IfStatement((yyvsp[-2].a_exp), (yyvsp[0].a_stmt), NULL);
         }
-#line 2343 "y.tab.c" /* yacc.c:1646  */
+#line 2344 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 404 "spl.y" /* yacc.c:1646  */
+#line 405 "spl.y" /* yacc.c:1646  */
     {
 		(yyval.a_stmt) = A_Fuction_IfStatement((yyvsp[-4].a_exp), (yyvsp[-2].a_stmt), (yyvsp[0].a_stmt));		
 		}
-#line 2351 "y.tab.c" /* yacc.c:1646  */
+#line 2352 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 408 "spl.y" /* yacc.c:1646  */
+#line 409 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_stmt) = A_Fuction_RepeatStatement((yyvsp[0].a_exp), (yyvsp[-2].a_stmtList));
             }
-#line 2359 "y.tab.c" /* yacc.c:1646  */
+#line 2360 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 411 "spl.y" /* yacc.c:1646  */
+#line 412 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_stmt) = A_Fuction_WhileStatement((yyvsp[-2].a_exp), (yyvsp[0].a_stmt));
             }
-#line 2367 "y.tab.c" /* yacc.c:1646  */
+#line 2368 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 414 "spl.y" /* yacc.c:1646  */
+#line 415 "spl.y" /* yacc.c:1646  */
     {
       		(yyval.a_stmt) = A_Fuction_ForStatement(A_Fuction_Var(makeSymbol((yyvsp[-6].sval), NULL)), (yyvsp[-4].a_exp), (yyvsp[-3].ival), (yyvsp[-2].a_exp), (yyvsp[0].a_stmt));
             }
-#line 2375 "y.tab.c" /* yacc.c:1646  */
+#line 2376 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 417 "spl.y" /* yacc.c:1646  */
+#line 418 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.ival) = 1;
             }
-#line 2383 "y.tab.c" /* yacc.c:1646  */
+#line 2384 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 420 "spl.y" /* yacc.c:1646  */
+#line 421 "spl.y" /* yacc.c:1646  */
     {
 			  (yyval.ival) = -1;
               }
-#line 2391 "y.tab.c" /* yacc.c:1646  */
+#line 2392 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 424 "spl.y" /* yacc.c:1646  */
+#line 425 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_stmt) = A_Fuction_CaseStatement((yyvsp[-3].a_exp), (yyvsp[-1].a_caseList));
             }
-#line 2399 "y.tab.c" /* yacc.c:1646  */
+#line 2400 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 427 "spl.y" /* yacc.c:1646  */
+#line 428 "spl.y" /* yacc.c:1646  */
     {
 				(yyval.a_caseList) = A_Fuction_CaseList((yyvsp[0].a_case), (yyvsp[-1].a_caseList));
                 }
-#line 2407 "y.tab.c" /* yacc.c:1646  */
+#line 2408 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 430 "spl.y" /* yacc.c:1646  */
+#line 431 "spl.y" /* yacc.c:1646  */
     {
 				(yyval.a_caseList) = A_Fuction_CaseList((yyvsp[0].a_case), NULL);
                 }
-#line 2415 "y.tab.c" /* yacc.c:1646  */
+#line 2416 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 434 "spl.y" /* yacc.c:1646  */
+#line 435 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_case) = A_Fuction_Case((yyvsp[-3].a_const), NULL, (yyvsp[-1].a_stmt));
             }
-#line 2423 "y.tab.c" /* yacc.c:1646  */
+#line 2424 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 437 "spl.y" /* yacc.c:1646  */
+#line 438 "spl.y" /* yacc.c:1646  */
     {
 			  (yyval.a_case) = A_Fuction_Case(NULL, makeSymbol((yyvsp[-3].sval), NULL), (yyvsp[-1].a_stmt));
               }
-#line 2431 "y.tab.c" /* yacc.c:1646  */
+#line 2432 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 441 "spl.y" /* yacc.c:1646  */
+#line 442 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_stmt) = A_Fuction_GotoStatement((yyvsp[0].ival));
 }
-#line 2439 "y.tab.c" /* yacc.c:1646  */
+#line 2440 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 446 "spl.y" /* yacc.c:1646  */
+#line 447 "spl.y" /* yacc.c:1646  */
     {
 				(yyval.a_expList) = A_Fuction_ExpList((yyvsp[0].a_exp), (yyvsp[-2].a_expList));
                 }
-#line 2447 "y.tab.c" /* yacc.c:1646  */
+#line 2448 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 449 "spl.y" /* yacc.c:1646  */
+#line 450 "spl.y" /* yacc.c:1646  */
     {
 				(yyval.a_expList) = A_Fuction_ExpList((yyvsp[0].a_exp), NULL);
                 }
-#line 2455 "y.tab.c" /* yacc.c:1646  */
+#line 2456 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 453 "spl.y" /* yacc.c:1646  */
+#line 454 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_exp) = A_Fuction_OpExp(A_geOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
             }
-#line 2463 "y.tab.c" /* yacc.c:1646  */
+#line 2464 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 456 "spl.y" /* yacc.c:1646  */
+#line 457 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_exp) = A_Fuction_OpExp(A_gtOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
             }
-#line 2471 "y.tab.c" /* yacc.c:1646  */
+#line 2472 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 459 "spl.y" /* yacc.c:1646  */
+#line 460 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_exp) = A_Fuction_OpExp(A_leOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
             }
-#line 2479 "y.tab.c" /* yacc.c:1646  */
+#line 2480 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 462 "spl.y" /* yacc.c:1646  */
+#line 463 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_exp) = A_Fuction_OpExp(A_ltOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
             }
-#line 2487 "y.tab.c" /* yacc.c:1646  */
+#line 2488 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 465 "spl.y" /* yacc.c:1646  */
+#line 466 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_exp) = A_Fuction_OpExp(A_eqOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
             }
-#line 2495 "y.tab.c" /* yacc.c:1646  */
+#line 2496 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 468 "spl.y" /* yacc.c:1646  */
+#line 469 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_exp) = A_Fuction_OpExp(A_neqOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
             }
-#line 2503 "y.tab.c" /* yacc.c:1646  */
+#line 2504 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 471 "spl.y" /* yacc.c:1646  */
+#line 472 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_exp) = (yyvsp[0].a_exp);
             }
-#line 2511 "y.tab.c" /* yacc.c:1646  */
+#line 2512 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 475 "spl.y" /* yacc.c:1646  */
+#line 476 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_plusOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
     }
-#line 2519 "y.tab.c" /* yacc.c:1646  */
+#line 2520 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 478 "spl.y" /* yacc.c:1646  */
+#line 479 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_minusOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
     }
-#line 2527 "y.tab.c" /* yacc.c:1646  */
+#line 2528 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 481 "spl.y" /* yacc.c:1646  */
+#line 482 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_orOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
     }
-#line 2535 "y.tab.c" /* yacc.c:1646  */
+#line 2536 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 484 "spl.y" /* yacc.c:1646  */
+#line 485 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = (yyvsp[0].a_exp);
     }
-#line 2543 "y.tab.c" /* yacc.c:1646  */
+#line 2544 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 488 "spl.y" /* yacc.c:1646  */
+#line 489 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_mulOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
     }
-#line 2551 "y.tab.c" /* yacc.c:1646  */
+#line 2552 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 491 "spl.y" /* yacc.c:1646  */
+#line 492 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_divOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
     }
-#line 2559 "y.tab.c" /* yacc.c:1646  */
+#line 2560 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 494 "spl.y" /* yacc.c:1646  */
+#line 495 "spl.y" /* yacc.c:1646  */
     {
  	(yyval.a_exp) = A_Fuction_OpExp(A_modOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
     }
-#line 2567 "y.tab.c" /* yacc.c:1646  */
+#line 2568 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 497 "spl.y" /* yacc.c:1646  */
+#line 498 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_andOp, (yyvsp[-2].a_exp), (yyvsp[0].a_exp));
     }
-#line 2575 "y.tab.c" /* yacc.c:1646  */
+#line 2576 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 500 "spl.y" /* yacc.c:1646  */
+#line 501 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = (yyvsp[0].a_exp);
     }
-#line 2583 "y.tab.c" /* yacc.c:1646  */
+#line 2584 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 504 "spl.y" /* yacc.c:1646  */
+#line 505 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_NameExp(makeSymbol((yyvsp[0].sval), NULL));
     }
-#line 2591 "y.tab.c" /* yacc.c:1646  */
+#line 2592 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 507 "spl.y" /* yacc.c:1646  */
+#line 508 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_FuncExp(A_Fuction_Proc(makeSymbol((yyvsp[-3].sval), NULL), (yyvsp[-1].a_expList)));
     }
-#line 2599 "y.tab.c" /* yacc.c:1646  */
+#line 2600 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 510 "spl.y" /* yacc.c:1646  */
+#line 511 "spl.y" /* yacc.c:1646  */
     {
 	    switch((yyvsp[0].sys_funct)){
 			case SYS_FUNCT_ABS: (yyval.a_exp) = A_Fuction_FuncExp(A_Fuction_Proc(makeSymbol("abs", NULL),NULL)); break;
@@ -2612,11 +2613,11 @@ yyreduce:
 			case SYS_FUNCT_SUCC: (yyval.a_exp) = A_Fuction_FuncExp(A_Fuction_Proc(makeSymbol("succ", NULL),NULL)); break;
 		}
     }
-#line 2616 "y.tab.c" /* yacc.c:1646  */
+#line 2617 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 522 "spl.y" /* yacc.c:1646  */
+#line 523 "spl.y" /* yacc.c:1646  */
     {
         switch((yyvsp[-3].sys_funct)){
 			case SYS_FUNCT_ABS: (yyval.a_exp) = A_Fuction_FuncExp(A_Fuction_Proc(makeSymbol("abs", NULL),(yyvsp[-1].a_expList))); break;
@@ -2629,76 +2630,76 @@ yyreduce:
 			case SYS_FUNCT_SUCC: (yyval.a_exp) = A_Fuction_FuncExp(A_Fuction_Proc(makeSymbol("succ", NULL),(yyvsp[-1].a_expList))); break;
 		}
     }
-#line 2633 "y.tab.c" /* yacc.c:1646  */
+#line 2634 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 534 "spl.y" /* yacc.c:1646  */
+#line 535 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_ConstExp((yyvsp[0].a_const));
 
     }
-#line 2642 "y.tab.c" /* yacc.c:1646  */
+#line 2643 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 538 "spl.y" /* yacc.c:1646  */
+#line 539 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = (yyvsp[-1].a_exp);
     }
-#line 2650 "y.tab.c" /* yacc.c:1646  */
+#line 2651 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 541 "spl.y" /* yacc.c:1646  */
+#line 542 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_notOp, NULL, (yyvsp[0].a_exp));
     }
-#line 2658 "y.tab.c" /* yacc.c:1646  */
+#line 2659 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 544 "spl.y" /* yacc.c:1646  */
+#line 545 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_OpExp(A_negOp, NULL, (yyvsp[0].a_exp));
     }
-#line 2666 "y.tab.c" /* yacc.c:1646  */
+#line 2667 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 547 "spl.y" /* yacc.c:1646  */
+#line 548 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_VarExp(A_Fuction_ArrayElement(makeSymbol((yyvsp[-3].sval), NULL), (yyvsp[-1].a_exp)));
     }
-#line 2674 "y.tab.c" /* yacc.c:1646  */
+#line 2675 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 550 "spl.y" /* yacc.c:1646  */
+#line 551 "spl.y" /* yacc.c:1646  */
     {
 	(yyval.a_exp) = A_Fuction_VarExp(A_Fuction_RecordField(makeSymbol((yyvsp[-2].sval), NULL), makeSymbol((yyvsp[0].sval), NULL)));
     }
-#line 2682 "y.tab.c" /* yacc.c:1646  */
+#line 2683 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 125:
-#line 554 "spl.y" /* yacc.c:1646  */
+#line 555 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_expList) = A_Fuction_ExpList((yyvsp[0].a_exp), (yyvsp[-2].a_expList));
             }
-#line 2690 "y.tab.c" /* yacc.c:1646  */
+#line 2691 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 126:
-#line 557 "spl.y" /* yacc.c:1646  */
+#line 558 "spl.y" /* yacc.c:1646  */
     {
 			(yyval.a_expList) = A_Fuction_ExpList((yyvsp[0].a_exp), NULL);
             }
-#line 2698 "y.tab.c" /* yacc.c:1646  */
+#line 2699 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2702 "y.tab.c" /* yacc.c:1646  */
+#line 2703 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2933,7 +2934,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 563 "spl.y" /* yacc.c:1906  */
+#line 564 "spl.y" /* yacc.c:1906  */
 
 extern int cur_line_num;
 void yyerror(char *s)

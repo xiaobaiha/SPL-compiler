@@ -149,9 +149,18 @@ name    [a-zA-Z][_a-zA-Z0-9]*
 {var}   { adjust(yytext);return VAR;}
 {while} { adjust(yytext);return WHILE;}
 
-{sys_con}   { adjust(yytext);return SYS_CON;}
-{sys_funct} { adjust(yytext);return SYS_FUNCT;}   
-{sys_proc}  { adjust(yytext);return SYS_PROC;}
+"true" {adjust(yytext);yylval.sys_con = SYS_CON_TRUE;return SYS_CON;}
+"false" {adjust(yytext);yylval.sys_con = SYS_CON_FALSE;return SYS_CON;}
+"abs" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_ABS;return SYS_FUNCT;}
+"chr" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_CHR;return SYS_FUNCT;}
+"odd" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_ODD;return SYS_FUNCT;}
+"ord" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_ORD;return SYS_FUNCT;}
+"pred" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_PRED;return SYS_FUNCT;}
+"sqr" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_SQR;return SYS_FUNCT;}
+"sqrt" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_SQRT;return SYS_FUNCT;}
+"succ" {adjust(yytext);yylval.sys_funct = SYS_FUNCT_SUCC;return SYS_FUNCT;}
+"write"  { adjust(yytext);yylval.sys_proc = SYS_PROC_WRITE;return SYS_PROC;}
+"writeln" { adjust(yytext);yylval.sys_proc = SYS_PROC_WRITELN;return SYS_PROC;}
 {sys_type}  { adjust(yytext);return SYS_TYPE;}
 
 {name}  { adjust(yytext);return construct_name();}

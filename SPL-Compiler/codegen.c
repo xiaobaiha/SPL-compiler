@@ -70,53 +70,96 @@ your .s file.
          */
 
 void gencode(A_pro root, int varsize, int maxlabel)
-{  
+{
     table_t name;
     A_routine routine;
     name = root->name;
     routine = root->routine;
     nextlabel = maxlabel + 1;
-    stkframesize = asmentry(name->name,varsize);
+    stkframesize = asmentry(name->name, varsize);
     genc(routine);
     asmexit(name->name);
 }
 
 /* Generate code for a Statement from an intermediate-code form */
 void genc(A_routine code)
-{  
+{
     A_routine_head head;
     A_stmtList compoundStmt;
     head = code->head;
+    genRoutineHead(head);
     compoundStmt = code->compoundStmt;
     genstmt(compoundStmt);
 }
 
 void genRoutineHead(A_routine_head head)
 {
-  if (!head)
-    return;
-  dealDecList(head->routinePart);
+    if (!head)
+        return;
+    dealDecList(head->routinePart);
 }
 
 void genstmt(A_stmtList stmt)
 {
     A_stmtList tList = stmt;
-    for (; tList; tList = tList->next)
+    int i = 0;
+    while (tList){
         munchStm(tList->head);
+        tList = tList->next;
+    }
 }
 
 void munchStm(A_stmt aStmt)
 {
-    switch(aStmt->kind) {
-        case A_assignStmt: { break;}
-        case A_procStmt: { break;}
-        case A_compundStmt:{ dealCompundStmt(aStmt);break;}
-        case A_ifStmt: { dealIfStmt(aStmt); break;}
-        case A_repeatStmt:{dealRepeatStmt(aStmt); break;}
-        case A_whileStmt:{ dealWhileStmt(aStmt); break;}
-        case A_forStmt:{ dealForStmt(aStmt->value.forStmt);break;}
-        case A_caseStmt:{ dealCaseStmt(aStmt);break;}
-        case A_gotoStmt:{ dealGotoStmt(aStmt);break;}
+    
+    int k = aStmt->kind;
+    switch (aStmt->kind)
+    {
+        case A_assignStmt:
+        {
+            dealAssignStmt(aStmt->value.assignStmt);
+            break;
+        }
+        case A_procStmt:
+        {
+            dealProcStmt(aStmt->value.procStmt);
+            break;
+        }
+        case A_compundStmt:
+        {
+            dealCompundStmt(aStmt);
+            break;
+        }
+        case A_ifStmt:
+        {
+            dealIfStmt(aStmt);
+            break;
+        }
+        case A_repeatStmt:
+        {
+            dealRepeatStmt(aStmt);
+            break;
+        }
+        case A_whileStmt:
+        {
+            dealWhileStmt(aStmt);
+            break;
+        }
+        case A_forStmt:
+        {
+            dealForStmt(aStmt->value.forStmt);
+            break;
+        }
+        case A_caseStmt:
+        {
+            dealCaseStmt(aStmt);
+            break;
+        }
+        case A_gotoStmt:
+        {
+            dealGotoStmt(aStmt);
+            break;
+        }
     }
 }
 
@@ -133,7 +176,8 @@ void dealIfStmt(A_stmt stmt)
         false_label_num = nextlabel++;
     true_label_num = nextlabel++;
 
-    if (node.elseStmt) {
+    if (node.elseStmt)
+    {
         asmjump(JMP, false_label_num); //exp is false
         asmlabel(if_num);
         munchStm(node.thenStmt);
@@ -142,7 +186,8 @@ void dealIfStmt(A_stmt stmt)
         munchStm(node.elseStmt);
         asmlabel(true_label_num);
     }
-    else{
+    else
+    {
         asmjump(JMP, true_label_num); //exp if true
         asmlabel(if_num);
         munchStm(node.thenStmt);
@@ -154,7 +199,8 @@ void dealIfStmt(A_stmt stmt)
 void dealCompundStmt(A_stmt stmt)
 {
     A_compound compound = stmt->value.compoundStmt;
-    if(compound) {
+    if (compound)
+    {
         A_stmtList stmtlist = compound->substmtList;
         genstmt(stmtlist);
     }
@@ -203,494 +249,469 @@ void dealGotoStmt(A_stmt stmt)
 }
 /*..............................................*/
 
-
 /***************** fzj **************/
 void dealDecList(A_decList decList)
 {
-  //A_dec head = decList->head;
-  if (decList)
-  {
-    A_dec head = decList->head;
-    dealDecListHead(head);
-    dealDecList(decList->next);
-  }
+    //A_dec head = decList->head;
+    if (decList)
+    {
+        A_dec head = decList->head;
+        dealDecListHead(head);
+        dealDecList(decList->next);
+    }
 }
 
 void dealDecListHead(A_dec node)
 {
-  if (node && node->kind == A_routineDec)
-  {
-    dealRoutinePart(node->value.routine);
-  }
+    if (node && node->kind == A_routineDec)
+    {
+        dealRoutinePart(node->value.routine);
+    }
 }
 
 void dealRoutinePart(A_routine_part routine_part)
 {
-  dealRoutinePartHead(routine_part->head);
-  genc(routine_part->subRoutine);
+    dealRoutinePartHead(routine_part->head);
+    genc(routine_part->subRoutine);
 }
 
 void dealRoutinePartHead(A_routine_part_head head)
 {
-  cannedcode(function_asm_code);
-  A_paraList argList = head->parameters;
-  while (argList)
-  {
-    A_paraField field = argList->field;
+    cannedcode(function_asm_code);
+    A_paraList argList = head->parameters;
+    while (argList)
+    {
+        A_paraField field = argList->field;
 
-    switch (field->kind)
-    {
-    case Var_type:
-    {
-      A_nameList namelist = field->nameList;
-      dealNameList(namelist);
-      break;
+        switch (field->kind)
+        {
+            case Var_type:
+            {
+                A_nameList namelist = field->nameList;
+                dealNameList(namelist);
+                break;
+            }
+            case Value_type:
+            {
+                break;
+            }
+        }
+        argList = argList->next;
     }
-    case Value_type:
-    {
-      break;
-    }
-      argList = argList->next;
-    }
-  }
 }
 void dealNameList(A_nameList namelist)
 {
-  int index = 0;
-  while (namelist)
-  {
-    A_name name = namelist->head;
-    int reg_num = arg_reg[index++];
-    mark_reg_used(reg_num);
-    asmst(MOVL, reg_num, ASM_OFFSET, name->name->name);
-    namelist = namelist->next;
-  }
+    int index = 0;
+    while (namelist)
+    {
+        A_name name = namelist->head;
+        int reg_num = arg_reg[index++];
+        mark_reg_used(reg_num);
+        asmst(MOVL, reg_num, ASM_OFFSET, name->name->name);
+        namelist = namelist->next;
+    }
 }
 
 void dealAssignStmt(A_assign assignStmt)
 {
-  A_var var = assignStmt->var;
-  A_exp exp = assignStmt->exp;
-  switch (var->kind)
-  {
-  case A_pureID:
-  {
-    int reg_num;
-    switch (exp->kind)
+    A_var var = assignStmt->var;
+    A_exp exp = assignStmt->exp;
+    int k = var->kind;
+    
+    switch (k)
     {
-        case A_constExp:{
-            A_const constvalue = exp->value.constValue;
-            if (constvalue->kind == Ty_real)
+        case A_pureID:
+        {
+            int reg_num;
+            switch (exp->kind)
             {
-                reg_num = getreg(Ty_real);
-                double realValue = constvalue->value.real;
-                asmst(MOVSD, reg_num, realValue, "");
-                free_reg(reg_num);
-            }
-            else if (constvalue->kind == Ty_integer)
-            {
-                reg_num = getreg(Ty_integer);
-                int intValue = constvalue->value.integer;
-                asmst(MOVL, reg_num, intValue, "");
-                free_reg(reg_num);
+                case A_constExp:
+                {
+                    A_const constvalue = exp->value.constValue;
+                    if (constvalue->kind == Ty_real)
+                    {
+                        reg_num = getreg(Ty_real);
+                        double realValue = constvalue->value.real;
+                        asmst(MOVSD, reg_num, realValue, "");
+                        free_reg(reg_num);
+                    }
+                    else if (constvalue->kind == Ty_integer)
+                    {
+                        reg_num = getreg(Ty_integer);
+                        int intValue = constvalue->value.integer;
+                        asmst(MOVL, reg_num, intValue, "");
+                        free_reg(reg_num);
+                    }
+                    break;
+                }
+                case A_opExp:
+                {
+                    reg_num = dealExp(exp);
+                    asmst(MOVL, reg_num, 0, "");
+                    free_reg(reg_num);
+                    break;
+                }
+                case A_funcExp: {
+                    dealProcStmt(exp->value.func);
+                    break;
+                }
+                case A_nameExp:{
+                    reg_num = getreg(Ty_integer);
+                    asmst(MOVL, reg_num, ASM_OFFSET, exp->value.name->name);
+                    break;
+                }
+                case A_varExp:{
+                    asmldrr(MOVL, ASM_OFFSET, dealVarExp(exp->value.var), dealVarExp(var),"move from reg1 to reg2");
+                    break;
+                }
             }
             break;
         }
-        case A_opExp:{
-            reg_num = dealExp(exp);
-            asmst(MOVL, reg_num, 0, "");
-            free_reg(reg_num);
+        case A_arrayElement:
+        {
+            A_exp sub = var->value.subscript;
+            table_t field_id = var->ID;
+            int reg_temp = dealExp(sub);
+            asmstrr(MOVL, reg_temp, 0, EAX, field_id->name);
+            free_reg(reg_temp);
+            break;
+        }
+        case A_recordField:
+        {
+            A_exp sub = var->value.subscript;
+            table_t field_id = var->value.fieldID;
+            int reg_num = dealExp(sub);
+            asmstrr(MOVL, reg_num, ASM_OFFSET, EAX, field_id->name);
             break;
         }
     }
-    break;
-  }
-  case A_arrayElement:
-  {
-    A_exp sub = var->value.subscript;
-    table_t field_id = var->ID;
-    int reg_temp = dealExp(sub);
-    asmstrr(MOVL, reg_temp, 0, EAX, field_id->name);
-    free_reg(reg_temp);
-    break;
-  }
-  case A_recordField:
-  {
-    A_exp sub = var->value.subscript;
-    table_t field_id = var->value.fieldID;
-    int reg_num = dealExp(sub);
-    asmstrr(MOVL, reg_num, ASM_OFFSET, EAX, field_id->name);
-    break;
-  }
-  }
 }
 
 void dealProcStmt(A_proc procStmt)
 {
-  A_exp arg_temp;
-  A_expList iter = procStmt->args;
-  int arg_index = 0, temp_reg = 0;
-  while (iter)
-  {
-    arg_temp = iter->head;
-    temp_reg = dealExp(arg_temp);
-    asmrr(MOVL, temp_reg, arg_reg[arg_index]); // score values into arg reg
-    mark_reg_used(arg_reg[arg_index++]);
-    iter = iter->next;
-  }
-  asmcall(procStmt->name->name);
-  free_reg(arg_reg[0]);
-  free_reg(arg_reg[1]);
-  free_reg(arg_reg[2]);
-  free_reg(arg_reg[3]);
+    A_exp arg_temp;
+    A_expList iter = procStmt->args;
+    int arg_index = 0, temp_reg = 0;
+
+    while (iter)
+    {
+        
+        arg_temp = iter->head;
+        temp_reg = dealExp(arg_temp);
+        asmrr(MOVL, temp_reg, arg_reg[arg_index]); // score values into arg reg
+        
+        mark_reg_used(arg_reg[arg_index++]);
+        iter = iter->next;
+    }
+    asmcall(procStmt->name->name);
+    
+    free_reg(arg_reg[0]);
+    free_reg(arg_reg[1]);
+    free_reg(arg_reg[2]);
+    free_reg(arg_reg[3]);
 }
 
 void dealForStmt(A_for forStmt)
 {
-  int init_reg_num = dealExp(forStmt.initValue);
-  int final_reg_num = dealExp(forStmt.finalValue);
-  int for_start_label = nextlabel++;
-  int direction = forStmt.direction;
-  // define a const value 1
-  A_const one_const = (A_const)checked_malloc(sizeof(*one_const));
-  one_const->kind = Ty_integer;
-  one_const->value.integer = 1;
-  // end of define const value
-  int one_const_reg = dealConstExp(one_const);
-  asmlabel(for_start_label);
-  if (direction == 1)
-  {
-    asmrr(ADDL, one_const_reg, init_reg_num);
-  }
-  else
-  {
-    asmrr(SUBL, one_const_reg, init_reg_num);
-  }
-  asmrr(CMPL, init_reg_num, final_reg_num);
-  int for_end_label = nextlabel++;
-  asmjump(JGE, for_end_label);
-  munchStm(forStmt.body);
-  asmjump(JMP, for_start_label);
-  asmlabel(for_end_label);
-  free_reg(init_reg_num);
-  free_reg(final_reg_num);
+    int init_reg_num = dealExp(forStmt.initValue);
+    int final_reg_num = dealExp(forStmt.finalValue);
+    int for_start_label = nextlabel++;
+    int direction = forStmt.direction;
+    // define a const value 1
+    A_const one_const = (A_const)checked_malloc(sizeof(*one_const));
+    one_const->kind = Ty_integer;
+    one_const->value.integer = 1;
+    // end of define const value
+    int one_const_reg = dealConstExp(one_const);
+    asmlabel(for_start_label);
+    if (direction == 1)
+    {
+        asmrr(ADDL, one_const_reg, init_reg_num);
+    }
+    else
+    {
+        asmrr(SUBL, one_const_reg, init_reg_num);
+    }
+    asmrr(CMPL, init_reg_num, final_reg_num);
+    int for_end_label = nextlabel++;
+    asmjump(JGE, for_end_label);
+    munchStm(forStmt.body);
+    asmjump(JMP, for_start_label);
+    asmlabel(for_end_label);
+    free_reg(init_reg_num);
+    free_reg(final_reg_num);
 }
 
 // return reg index number
 int dealExp(A_exp aExp)
 {
-  int out_reg_num = 0;
-
-  switch (aExp->kind)
-  {
-  case A_opExp:
-  {
-    out_reg_num = dealOpExp(aExp->value.op);
-    break;
-  }
-  case A_funcExp:
-  {
-    out_reg_num = dealFuncExp(aExp->value.func);
-    break;
-  }
-  case A_nameExp:
-  {
-    out_reg_num = dealNameExp(aExp->value.name);
-    break;
-  }
-  case A_varExp:
-  {
-    out_reg_num = dealVarExp(aExp->value.var);
-    break;
-  }
-  case A_constExp:
-  {
-    out_reg_num = dealConstExp(aExp->value.constValue);
-    break;
-  }
-  }
+    int out_reg_num = 0;
+    switch (aExp->kind)
+    {
+        case A_opExp:
+        {
+            out_reg_num = dealOpExp(aExp->value.op);
+            break;
+        }
+        case A_funcExp:
+        {
+            out_reg_num = dealFuncExp(aExp->value.func);
+            break;
+        }
+        case A_nameExp:
+        {
+            out_reg_num = dealNameExp(aExp->value.name);
+            break;
+        }
+        case A_varExp:
+        {
+            out_reg_num = dealVarExp(aExp->value.var);
+            break;
+        }
+        case A_constExp:
+        {
+            out_reg_num = dealConstExp(aExp->value.constValue);
+            break;
+        }
+    }
+    return out_reg_num;
 }
 
 // return reg index number
 int dealOpExp(A_op op)
 {
-  int left_reg_num = 0;
-  int right_reg_num = 0;
-  int out_reg_num = 0;
-  int float_flag = 0;
+    int left_reg_num = 0;
+    int right_reg_num = 0;
+    int out_reg_num = 0;
+    int float_flag = 0;
 
-  if (op->left->kind == A_opExp)
-  {
     left_reg_num = dealExp(op->left);
-  }
-  else
-  {
-    if (op->left->kind == A_constExp && op->left->value.constValue->kind == Ty_real)
-    {
-      left_reg_num = getreg(Ty_real);
-      float_flag = 1;
-      double realValue = op->left->value.constValue->value.real;
-      asmst(MOVSD, left_reg_num, 0, "");
-    }
-    else if (op->left->kind == A_constExp)
-    {
-      left_reg_num = getreg(Ty_integer);
-      double realValue = op->left->value.constValue->value.integer;
-      asmst(MOVL, left_reg_num, 0, "");
-    }
-    else
-    {
-      printf("# other type in op left...");
-    }
-  }
-  if (op->right->kind == A_opExp)
-  {
     right_reg_num = dealExp(op->right);
-  }
-  else
-  {
-    if (op->right->kind == A_constExp && op->right->value.constValue->kind == Ty_real)
+
+    switch (op->oper)
     {
-      right_reg_num = getreg(Ty_real);
-      float_flag = 1;
-      double realValue = op->right->value.constValue->value.real;
-      asmst(MOVSD, right_reg_num, 0, "");
-    }
-    else if (op->right->kind == A_constExp)
+    case A_plusOp:
     {
-      right_reg_num = getreg(Ty_integer);
-      double realValue = op->right->value.constValue->value.integer;
-      asmst(MOVL, right_reg_num, 0, "");
-    }
-    else
+        if (float_flag)
+        {
+            asmrr(ADDSD, left_reg_num, right_reg_num);
+        }
+        else
+        {
+            asmrr(ADDL, left_reg_num, right_reg_num);
+        }
+        out_reg_num = right_reg_num;
+        free_reg(left_reg_num);
+        break;
+    };
+    case A_minusOp:
     {
-      printf("# other type in op right...");
-    }
-  }
-  switch (op->oper)
-  {
-  case A_plusOp:
-  {
-    if (float_flag)
+        if (left_reg_num > 15 && left_reg_num < NUM_REGS)
+        {
+            asmfneg(left_reg_num, getreg(Ty_real));
+            right_reg_num = left_reg_num;
+        }
+        else if (float_flag)
+        {
+            asmrr(SUBSD, right_reg_num, left_reg_num);
+        }
+        else
+        {
+            asmrr(SUBL, right_reg_num, left_reg_num);
+        }
+        out_reg_num = left_reg_num;
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_mulOp:
     {
-      asmrr(ADDSD, left_reg_num, right_reg_num);
-    }
-    else
+        if (float_flag)
+        {
+            asmrr(MULSD, right_reg_num, left_reg_num);
+        }
+        else
+        {
+            asmrr(IMULL, right_reg_num, left_reg_num);
+        }
+        out_reg_num = left_reg_num;
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_divOp:
     {
-      asmrr(ADDL, left_reg_num, right_reg_num);
-    }
-    out_reg_num = right_reg_num;
-    free_reg(left_reg_num);
-    break;
-  };
-  case A_minusOp:
-  {
-    if (left_reg_num > 15 && left_reg_num < NUM_REGS)
+        if (float_flag)
+        {
+            asmrr(DIVSD, right_reg_num, left_reg_num);
+        }
+        else
+        {
+            asmrr(DIVL, right_reg_num, left_reg_num);
+        }
+        out_reg_num = left_reg_num;
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_modOp:
     {
-      asmfneg(left_reg_num, getreg(Ty_real));
-      right_reg_num = left_reg_num;
-    }
-    else if (float_flag)
+        int temp_reg = getreg(Ty_integer);
+        asmrr(MOVL, left_reg_num, temp_reg);
+        asmrr(DIVL, right_reg_num, left_reg_num);
+        asmrr(IMULL, right_reg_num, left_reg_num);
+        asmrr(SUBL, left_reg_num, temp_reg);
+        out_reg_num = temp_reg;
+        free_reg(left_reg_num);
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_eqOp:
     {
-      asmrr(SUBSD, right_reg_num, left_reg_num);
-    }
-    else
+        out_reg_num = nextlabel++;
+        asmrr(CMPL, right_reg_num, left_reg_num);
+        asmjump(JE, out_reg_num);
+        free_reg(left_reg_num);
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_neqOp:
     {
-      asmrr(SUBL, right_reg_num, left_reg_num);
-    }
-    out_reg_num = left_reg_num;
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_mulOp:
-  {
-    if (float_flag)
+        out_reg_num = nextlabel++;
+        asmrr(CMPQ, right_reg_num, left_reg_num);
+        asmjump(JNE, out_reg_num);
+        free_reg(left_reg_num);
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_ltOp:
     {
-      asmrr(MULSD, right_reg_num, left_reg_num);
-    }
-    else
+        out_reg_num = nextlabel++;
+        asmrr(CMPL, right_reg_num, left_reg_num);
+        asmjump(JL, out_reg_num);
+        free_reg(left_reg_num);
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_gtOp:
     {
-      asmrr(IMULL, right_reg_num, left_reg_num);
-    }
-    out_reg_num = left_reg_num;
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_divOp:
-  {
-    if (float_flag)
+        out_reg_num = nextlabel++;
+        asmrr(CMPL, right_reg_num, left_reg_num);
+        asmjump(JG, out_reg_num);
+        free_reg(left_reg_num);
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_leOp:
     {
-      asmrr(DIVSD, right_reg_num, left_reg_num);
-    }
-    else
+        out_reg_num = nextlabel++;
+        asmrr(CMPL, right_reg_num, left_reg_num);
+        asmjump(JLE, out_reg_num);
+        free_reg(left_reg_num);
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_geOp:
     {
-      asmrr(DIVL, right_reg_num, left_reg_num);
+        out_reg_num = nextlabel++;
+        asmrr(CMPL, right_reg_num, left_reg_num);
+        asmjump(JGE, out_reg_num);
+        free_reg(left_reg_num);
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_orOp:
+    {
+        asmrr(ORL, right_reg_num, left_reg_num);
+        out_reg_num = left_reg_num;
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_andOp:
+    {
+        asmrr(ANDL, right_reg_num, left_reg_num);
+        out_reg_num = left_reg_num;
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_notOp:
+    {
+        asmrr(NOTQ, right_reg_num, left_reg_num);
+        out_reg_num = left_reg_num;
+        free_reg(right_reg_num);
+        break;
+    };
+    case A_negOp:
+    {
+        asmrr(NEGL, right_reg_num, left_reg_num);
+        out_reg_num = left_reg_num;
+        free_reg(right_reg_num);
+        break;
+    };
     }
-    out_reg_num = left_reg_num;
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_modOp:
-  {
-    int temp_reg = getreg(Ty_integer);
-    asmrr(MOVL, left_reg_num, temp_reg);
-    asmrr(DIVL, right_reg_num, left_reg_num);
-    asmrr(IMULL, right_reg_num, left_reg_num);
-    asmrr(SUBL, left_reg_num, temp_reg);
-    out_reg_num = temp_reg;
-    free_reg(left_reg_num);
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_eqOp:
-  {
-    out_reg_num = nextlabel++;
-    asmrr(CMPL, right_reg_num, left_reg_num);
-    asmjump(JE, out_reg_num);
-    free_reg(left_reg_num);
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_neqOp:
-  {
-    out_reg_num = nextlabel++;
-    asmrr(CMPQ, right_reg_num, left_reg_num);
-    asmjump(JNE, out_reg_num);
-    free_reg(left_reg_num);
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_ltOp:
-  {
-    out_reg_num = nextlabel++;
-    asmrr(CMPL, right_reg_num, left_reg_num);
-    asmjump(JL, out_reg_num);
-    free_reg(left_reg_num);
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_gtOp:
-  {
-    out_reg_num = nextlabel++;
-    asmrr(CMPL, right_reg_num, left_reg_num);
-    asmjump(JG, out_reg_num);
-    free_reg(left_reg_num);
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_leOp:
-  {
-    out_reg_num = nextlabel++;
-    asmrr(CMPL, right_reg_num, left_reg_num);
-    asmjump(JLE, out_reg_num);
-    free_reg(left_reg_num);
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_geOp:
-  {
-    out_reg_num = nextlabel++;
-    asmrr(CMPL, right_reg_num, left_reg_num);
-    asmjump(JGE, out_reg_num);
-    free_reg(left_reg_num);
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_orOp:
-  {
-    asmrr(ORL, right_reg_num, left_reg_num);
-    out_reg_num = left_reg_num;
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_andOp:
-  {
-    asmrr(ANDL, right_reg_num, left_reg_num);
-    out_reg_num = left_reg_num;
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_notOp:
-  {
-    asmrr(NOTQ, right_reg_num, left_reg_num);
-    out_reg_num = left_reg_num;
-    free_reg(right_reg_num);
-    break;
-  };
-  case A_negOp:
-  {
-    asmrr(NEGL, right_reg_num, left_reg_num);
-    out_reg_num = left_reg_num;
-    free_reg(right_reg_num);
-    break;
-  };
-  }
-  return out_reg_num;
+    return out_reg_num;
 }
 
 // return reg index number
 int dealFuncExp(A_proc proc)
 {
-  int out_reg_num = 0;
-  asmcall(proc->name->name);
-  out_reg_num = getreg(Ty_integer);
-  if (out_reg_num != EAX)
-    asmrr(MOVL, EAX, out_reg_num);
-  return out_reg_num;
+    int out_reg_num = 0;
+    asmcall(proc->name->name);
+    out_reg_num = getreg(Ty_integer);
+    if (out_reg_num != EAX)
+        asmrr(MOVL, EAX, out_reg_num);
+    return out_reg_num;
 }
 
 int dealNameExp(table_t name)
 {
-  int out_reg_num = getreg(Ty_integer);
-  asmld(MOVL, ASM_OFFSET, out_reg_num, name->name);
-  return out_reg_num;
+    int out_reg_num = getreg(Ty_integer);
+    asmld(MOVL, ASM_OFFSET, out_reg_num, name->name);
+    return out_reg_num;
 }
 
 int dealVarExp(A_var var)
 {
-  int out_reg_num = -1;
-  switch (var->kind)
-  {
-  case A_pureID:
-  {
-    out_reg_num = getreg(Ty_integer);
-    asmld(MOVL, ASM_OFFSET, out_reg_num, var->ID->name);
-    break;
-  }
-  case A_arrayElement:
-  {
-    out_reg_num = getreg(Ty_integer);
-    asmld(MOVL, ASM_OFFSET, out_reg_num, var->value.fieldID->name);
-    break;
-  }
-  case A_recordField:
-  {
-    A_exp sub = var->value.subscript;
-    table_t field_id = var->value.fieldID;
-    out_reg_num = dealExp(sub);
-    asmstrr(MOVL, out_reg_num, ASM_OFFSET, EAX, field_id->name);
-    break;
-  }
-  }
-  return out_reg_num;
+    int out_reg_num = -1;
+    switch (var->kind)
+    {
+    case A_pureID:
+    {
+        out_reg_num = getreg(Ty_integer);
+        asmld(MOVL, ASM_OFFSET, out_reg_num, var->ID->name);
+        break;
+    }
+    case A_arrayElement:
+    {
+        out_reg_num = getreg(Ty_integer);
+        asmld(MOVL, ASM_OFFSET, out_reg_num, var->ID->name);
+        break;
+    }
+    case A_recordField:
+    {
+        A_exp sub = var->value.subscript;
+        table_t field_id = var->value.fieldID;
+        out_reg_num = dealExp(sub);
+        asmstrr(MOVL, out_reg_num, ASM_OFFSET, EAX, field_id->name);
+        break;
+    }
+    }
+    return out_reg_num;
 }
 
 int dealConstExp(A_const constValue)
 {
-  int out_reg_num = -1;
-  if (constValue->kind == Ty_real)
-  {
-    out_reg_num = getreg(Ty_real);
-    double realValue = constValue->value.real;
-    asmst(MOVSD, out_reg_num, realValue, "");
-  }
-  else
-  {
-    out_reg_num = getreg(Ty_integer);
-    int intValue = constValue->value.integer;
-    asmst(MOVL, out_reg_num, intValue, "");
-  }
-  return out_reg_num;
+    int out_reg_num = -1;
+    if (constValue->kind == Ty_real)
+    {
+        out_reg_num = getreg(Ty_real);
+        double realValue = constValue->value.real;
+        asmst(MOVSD, out_reg_num, realValue, "");
+    }
+    else
+    {
+        out_reg_num = getreg(Ty_integer);
+        int intValue = constValue->value.integer;
+        asmst(MOVL, out_reg_num, intValue, "");
+    }
+    return out_reg_num;
 }
 /* Trivial version: always returns RBASE + 0 */
 /* Get a register.   */
@@ -698,61 +719,60 @@ int dealConstExp(A_const constValue)
 int getreg(Ty_kind kind)
 {
 
-  /*     ***** NAIVE IMPLEMENTATION *****   */
+    /*     ***** NAIVE IMPLEMENTATION *****   */
 
-  int i = 0;
-  int stop = NUM_INT_REGS;
-  if (kind != Ty_integer)
-  {
-    //        i = 8;
-    i = 16;
-    stop = NUM_REGS;
-  }
-
-  for (; i < 7; i++)
-  {
-    if (used_regs[i] == 0)
+    int i = 0;
+    int stop = NUM_INT_REGS;
+    if (kind != Ty_integer)
     {
-      if (i == EDI || i == ESI || i == EDX || i == ECX)
-        continue;
-      used_regs[i] = 1;
-      return i;
+        //        i = 8;
+        i = 16;
+        stop = NUM_REGS;
     }
-  }
-  if (i >= stop)
-    printf("Regster Overflow.\n");
 
-  return RBASE;
+    for (; i < 7; i++)
+    {
+        if (used_regs[i] == 0)
+        {
+            if (i == EDI || i == ESI || i == EDX || i == ECX)
+                continue;
+            used_regs[i] = 1;
+            return i;
+        }
+    }
+    if (i >= stop)
+        printf("Regster Overflow.\n");
+
+    return RBASE;
 }
 
 void reset_regs()
 {
-  int i;
-  for (i = 0; i < NUM_REGS; i++)
-  {
-    used_regs[i] = 0;
-  }
+    int i;
+    for (i = 0; i < NUM_REGS; i++)
+    {
+        used_regs[i] = 0;
+    }
 }
 
 void free_reg(int reg_num)
 {
-  if (reg_num < 0 || reg_num >= NUM_REGS)
-  {
-    printf("Error: cannot free register number %d\n", reg_num);
-    return;
-  }
-  used_regs[reg_num] = 0;
+    if (reg_num < 0 || reg_num >= NUM_REGS)
+    {
+        printf("Error: cannot free register number %d\n", reg_num);
+        return;
+    }
+    used_regs[reg_num] = 0;
 }
 
 void mark_reg_used(int reg_num)
 {
-  if (reg_num < 0 || reg_num >= NUM_REGS)
-  {
-    printf("2 Error: register %d out of bounds\n", reg_num);
-    return;
-  }
-  used_regs[reg_num] = 1;
+    if (reg_num < 0 || reg_num >= NUM_REGS)
+    {
+        printf("2 Error: register %d out of bounds\n", reg_num);
+        return;
+    }
+    used_regs[reg_num] = 1;
 }
 /************ end of fzj **************/
 /*..............................................*/
-

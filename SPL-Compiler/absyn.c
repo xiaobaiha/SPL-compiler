@@ -349,6 +349,7 @@ A_var A_Fuction_ArrayElement(table_t ID, A_exp subscript){
 	p->ID = ID;
 	p->value.subscript = subscript;
 	p->kind = A_arrayElement;
+	//printf("p->kind:%d\n", p->kind);
 	return p;
 }
 

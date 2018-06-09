@@ -391,7 +391,8 @@ proc_stmt:  NAME {
               | SYS_PROC  LP  expression_list  RP {
                     switch($1){
                         case SYS_PROC_WRITE: $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("write", NULL), $3)); break;
-                        case SYS_PROC_WRITELN: $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("read", NULL), $3)); break;
+                        case SYS_PROC_WRITELN: $$ = A_Fuction_ProcStatement(A_Fuction_Proc(makeSymbol("writeln", NULL), $3)); break;
+                        
                     }
                 }
               | READ  LP  factor  RP {

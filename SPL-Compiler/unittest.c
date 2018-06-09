@@ -31,6 +31,7 @@ void test_stmt(A_stmtList node)
 {
     A_stmtList temp = node;
     while(temp->next){
+        getStmt(temp->head);
         printf("a_stmtlist is not Null\n");
         temp = temp->next;
     }
