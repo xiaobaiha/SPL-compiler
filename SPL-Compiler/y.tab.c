@@ -2156,7 +2156,7 @@ yyreduce:
   case 62:
 #line 324 "spl.y" /* yacc.c:1646  */
     {
-                    printf("compound_stmt\n");
+                    
 				    (yyval.a_stmt) = A_Fuction_CompoundStatement((yyvsp[-1].a_stmtList));
                 }
 #line 2163 "y.tab.c" /* yacc.c:1646  */

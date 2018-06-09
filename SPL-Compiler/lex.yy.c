@@ -1223,14 +1223,15 @@ YY_RULE_SETUP
 case 60:
 YY_RULE_SETUP
 #line 162 "spl.l"
-{ adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");}
+{ adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");
+	}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 164 "spl.l"
+#line 165 "spl.l"
 ECHO;
 	YY_BREAK
-#line 1234 "lex.yy.c"
+#line 1235 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2243,7 +2244,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 164 "spl.l"
+#line 165 "spl.l"
 
 
 

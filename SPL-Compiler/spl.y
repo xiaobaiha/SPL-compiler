@@ -322,7 +322,7 @@ routine_body: compound_stmt {
             }
 ;
 compound_stmt: BEGIN_TOKEN  stmt_list  END {
-                    printf("compound_stmt\n");
+                    
 				    $$ = A_Fuction_CompoundStatement($2);
                 }
 ;

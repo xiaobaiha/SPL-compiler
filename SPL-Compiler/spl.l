@@ -159,7 +159,8 @@ name    [a-zA-Z][_a-zA-Z0-9]*
 {integer}   { adjust(yytext);return construct_int();}
 {real}  { adjust(yytext);return construct_real();}
 
-.   { adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");}
+.   { adjust(yytext);lexError(cur_line_num, EM_tokPos, "Illegal Token!");
+	}
 
 %%
 

@@ -1,6 +1,6 @@
 #ifndef TYPES_H
 #define TYPES_H
-#include "symbol.h"
+//#include "symbol.h"
 
 #define TY__BOOLEAN 1
 #define TY_CHAR 2
@@ -19,6 +19,7 @@ typedef enum {
   Ty_name
 } Ty_kind;
 
+/*
 struct Ty_ty_
 {
   Ty_kind kind;
@@ -36,5 +37,5 @@ struct Ty_ty_
 Ty_ty makeSysType(int flag);
 Ty_ty Ty_Array(Ty_ty ty);
 Ty_ty Ty_Name(table_t sym, Ty_ty ty);
-
+*/
 #endif

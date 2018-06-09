@@ -36,7 +36,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "token.h"
-#include "symtab.h"
 #include "genasm.h"
 
 /* Print strings for registers */

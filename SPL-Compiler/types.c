@@ -2,11 +2,14 @@
 #include "util.h"
 
 //static struct Ty_ty_ tyarray = {Ty_array};
+
+/*
 static struct Ty_ty_ tybool = {Ty_boolean};
 static struct Ty_ty_ tychar = {Ty_char};
 static struct Ty_ty_ tyint = {Ty_integer};
 static struct Ty_ty_ tyreal = {Ty_real};
 static struct Ty_ty_ tystr = {Ty_string};
+
 
 Ty_ty makeSysType(int flag)
 {
@@ -41,3 +44,4 @@ Ty_ty Ty_Name(table_t sym, Ty_ty ty)
     return p;
 }
 
+*/

@@ -5,57 +5,60 @@
    pcode    = pointer to code = parseresult: (program foo (output) (progn ...))
    varsize  = size of local storage in bytes = blockoffs[blocknumber]
    maxlabel = maximum label number used so far = labelnumber    */
-void gencode(TOKEN pcode, int varsize, int maxlabel);
+void gencode(A_pro root, int varsize, int maxlabel);
 
-/* Generate arithmetic expression, return a register number */
-int genarith(TOKEN code);
+void genc(A_routine code);
 
-/* Generate code for a statement */
-void genc(TOKEN code);
+void genstmt(A_stmtList stmt);
 
+void genRoutineHead(A_routine_head head);
 
+void munchStm(A_stmt aStmt);
 
+void dealIfStmt(A_stmt stmt);
 
-/* You may use the function headers below if you wish,
-   or you may replace them if you wish.  */
+void dealCompundStmt(A_stmt stmt);
 
-/* Clear register used tables to mark all registers free.  */
-void clearreg();
+void dealRepeatStmt(A_stmt stmt);
 
-/* Mark a register unused */
-void unused(int reg);
+void dealWhileStmt(A_stmt stmt);
 
-/* Mark a register used */
-void used(int reg);
+void dealCaseStmt(A_stmt stmt);
 
-/* Get a register */
-int getreg(int kind);
+void dealGotoStmt(A_stmt stmt);
 
-/* Make a register non-volatile by moving it if necessary.
-   Result is the (possibly new) register number.   */
-int nonvolatile(int reg);
+void dealDecList(A_decList decList);
 
-/* Save caller-saves floating point registers on stack if in use */
-void savereg();
+void dealDecListHead(A_dec node);
 
-/* Restore caller-saves floating point registers from stack if in use */
-void restorereg();
+void dealRoutinePart(A_routine_part routine_part);
 
-/* test if there is a function call within code: 1 if true, else 0 */
-int funcallin(TOKEN code);
+void dealRoutinePartHead(A_routine_part_head head);
 
-/* find the op number that is equivalent to named function, if any */
-int findfunop(char str[]);
+void dealNameList(A_nameList namelist);
 
-/* Generate code for a function call */
-int genfun(TOKEN code);
+void dealAssignStmt(A_assign assignStmt);
 
-/* find the correct MOV op depending on type of code */
-int moveop(TOKEN code);
+void dealProcStmt(A_proc procStmt);
 
-/* Generate code for array references and pointers */
-/* In Pascal, a (^ ...) can only occur as first argument of an aref. */
-/* If storereg < 0, generates a load and returns register number;
-   else, generates a store from storereg. */
-int genaref(TOKEN code, int storereg);
+void dealForStmt(A_for forStmt);
 
+int dealExp(A_exp aExp);
+
+int dealOpExp(A_op op);
+
+int dealFuncExp(A_proc proc);
+
+int dealNameExp(table_t name);
+
+int dealVarExp(A_var var);
+
+int dealConstExp(A_const constValue);
+
+int getreg(Ty_kind kind);
+
+void reset_regs();
+
+void free_reg(int reg_num);
+
+void mark_reg_used(int reg_num);

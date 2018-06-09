@@ -1,6 +1,6 @@
 CC = gcc
 OUT = main
-OBJ = main.o lex.yy.o y.tab.o util.o error.o symbol.o types.o absyn.o
+OBJ = main.o lex.yy.o y.tab.o util.o error.o symbol.o types.o absyn.o genasm.o codegen.o
 SCANNER = spl.l
 PARSER = spl.y
 
@@ -39,11 +39,17 @@ util.o: util.c util.h
 absyn.o: absyn.c symbol.h types.h util.h types.h
 	$(CC) -g -c absyn.c
 
-types.o: types.c types.h symbol.h util.h
+types.o: types.c types.h util.h
 	$(CC) -g -c types.c
 
-symbol.o: symbol.c symbol.h util.h
+symbol.o: symbol.c symbol.h util.h types.h
 	$(CC) -g -c symbol.c
+
+genasm.o: genasm.c absyn.h symbol.h genasm.h
+	$(CC) -g -c genasm.c
+
+codegen.o: codegen.c absyn.h symbol.h genasm.h codegen.h util.h
+	$(CC) -g -c codegen.c
 
 y.tab.c: $(PARSER)
 	bison -vdty $<
