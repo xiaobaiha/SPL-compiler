@@ -266,6 +266,7 @@ void dealDecListHead(A_dec node)
 {
     if (node && node->kind == A_routineDec)
     {
+        asmstrLabel(node->name->name);
         dealRoutinePart(node->value.routine);
     }
 }
