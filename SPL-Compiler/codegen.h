@@ -1,10 +1,12 @@
 /* codegen.h     Gordon S. Novak Jr.    */
 /* 15 Aug 13 */
-
+#include "absyn.h"
 /* Top-level entry for code generator.
    pcode    = pointer to code = parseresult: (program foo (output) (progn ...))
    varsize  = size of local storage in bytes = blockoffs[blocknumber]
    maxlabel = maximum label number used so far = labelnumber    */
+
+/****** start of general structure analysis functions ********/
 void gencode(A_pro root, int varsize, int maxlabel);
 
 void genc(A_routine code);
@@ -42,7 +44,9 @@ void dealAssignStmt(A_assign assignStmt);
 void dealProcStmt(A_proc procStmt);
 
 void dealForStmt(A_for forStmt);
+/****** end of general structure analysis functions ********/
 
+/****** start of return expression register functions ********/
 int dealExp(A_exp aExp);
 
 int dealOpExp(A_op op);
@@ -54,6 +58,9 @@ int dealNameExp(table_t name);
 int dealVarExp(A_var var);
 
 int dealConstExp(A_const constValue);
+/****** end of return expression register functions ********/
+
+/****** start of register functions ********/
 
 int getreg(Ty_kind kind);
 
@@ -62,3 +69,4 @@ void reset_regs();
 void free_reg(int reg_num);
 
 void mark_reg_used(int reg_num);
+/****** end of register functions ********/

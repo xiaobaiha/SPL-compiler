@@ -197,6 +197,9 @@ void asmexit(char name[])
 void asmlabel(int labeln)
   {  printf(".L%d:\n", labeln);
    }
+void asmstrLabel(char name[]) {
+  printf("%s:\n", name);
+}
 
 /* Subroutine call */
 /* Example:  asmcall(code->stringval);    Call function */
@@ -468,3 +471,5 @@ void outlits()
      printf("\n");
      cannedcode(bottomcodec);
    }
+
+

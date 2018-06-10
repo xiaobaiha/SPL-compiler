@@ -76,6 +76,7 @@ void gencode(A_pro root, int varsize, int maxlabel)
     name = root->name;
     routine = root->routine;
     nextlabel = maxlabel + 1;
+    asmstrLabel(name);
     stkframesize = asmentry(name->name, varsize);
     genc(routine);
     asmexit(name->name);

@@ -202,3 +202,4 @@ void makeblit(char s[], int labeln);
 void outlits();
 
 void cannedcode(char* lines[]);
+void asmstrLabel(char name[]);
