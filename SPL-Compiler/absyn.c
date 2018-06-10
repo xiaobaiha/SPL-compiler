@@ -287,7 +287,7 @@ A_routine_part_head A_Fuction_FuncHead(table_t name, A_paraList parameters, A_si
 	p->name = name;
 	//p->kind = A_kind_function;
 	p->parameters = parameters;
-	p->simpleType = simpleType;
+	p->simpleType = simpleType; 
 	p->kind = A_kind_function;
 	return p;
 }
